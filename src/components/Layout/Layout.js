@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import Controlbar from '../UI/Controlbar/Controlbar'
 import Header from '../UI/Header/Header'
+import Canvas from '../Canvas/Canvas'
+
 const Layout = () => {
     return (
         <div>
             <Header></Header>
-            <Controlbar isVisible={true}></Controlbar>
+            <Canvas>
+            </Canvas>
         </div>
     )
 }
