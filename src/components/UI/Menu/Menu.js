@@ -14,6 +14,7 @@ const CustomMenu = props => {
                 aria-haspopup="true"
                 variant="contained"
                 size="small"
+                pd="5px"
                 onClick={props.click}
             >
                 {props.selectedOption}

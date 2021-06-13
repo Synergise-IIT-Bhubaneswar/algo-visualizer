@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const Header = () => {
+const Header = (props) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -102,7 +102,12 @@ const Header = () => {
                     </Button>
                 </Toolbar>
             </AppBar>
-            <CustomDrawer open={open} handleDrawerClose={handleDrawerClose}> </CustomDrawer>
+            <CustomDrawer
+                selectAlgorithm={props.selectAlgorithm}
+                AlgorithmOptions={props.AlgorithmOptions}
+                selectedAlgorithm={props.selectedAlgorithm}
+                open={open}
+                handleDrawerClose={handleDrawerClose}> </CustomDrawer>
 
         </div>
     );

@@ -40,6 +40,19 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
         justifyContent: "flex-end"
     },
+    visualizeButtonContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: theme.spacing(6, 1, 6),
+    },
+    visualizeButton: {
+
+        alignItems: "center",
+        padding: theme.spacing(2, 1, 2),
+    },
+
 
 }));
 const CustomDrawer = (props) => {
@@ -47,7 +60,7 @@ const CustomDrawer = (props) => {
     const theme = useTheme();
     const [algorithmMenuAnchor, setAlgorithmMenuAnchor] = useState(null)
     const algorithmMenuOpen = Boolean(algorithmMenuAnchor)
-    const [selectedAlgorithm, setSelectedAlgorithm] = useState(AlgorithmOptions[1])
+    //const [selectedAlgorithm, setSelectedAlgorithm] = useState(AlgorithmOptions[1])
 
     const openAlgorithmMenu = (e) => {
         setAlgorithmMenuAnchor(e.currentTarget)
@@ -58,7 +71,7 @@ const CustomDrawer = (props) => {
     }
 
     const selectAlgorithm = (algorithm) => {
-        setSelectedAlgorithm(algorithm)
+        props.selectAlgorithm(algorithm)
     }
     return (
         <Drawer
@@ -83,73 +96,104 @@ const CustomDrawer = (props) => {
                 </IconButton>
             </div>
             <Divider />
-            <List>
+            <div
+                className={classes.drawerHeader}
+            >
+                <List>
 
-                <ListItem>
-                    <ListItemIcon>
-                        <TimelineIcon fontSize="large" />
-                    </ListItemIcon>
-                    <ListItemText primary="Select Algorithm" />
-                    <Menu
-                        selectOption={selectAlgorithm}
-                        selectedOption={selectedAlgorithm}
-                        open={algorithmMenuOpen}
-                        anchor={algorithmMenuAnchor}
-                        close={closeAlgorithmMenu}
-                        options={AlgorithmOptions}
-                        click={(e) => openAlgorithmMenu(e)}></Menu>
-                </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <TimelineIcon fontSize="large" />
+                        </ListItemIcon>
+                        <ListItemText primary="Select Algorithm" />
+                        <Menu
+                            selectOption={selectAlgorithm}
+                            selectedOption={props.selectedAlgorithm}
+                            open={algorithmMenuOpen}
+                            anchor={algorithmMenuAnchor}
+                            close={closeAlgorithmMenu}
+                            options={props.AlgorithmOptions}
+                            click={(e) => openAlgorithmMenu(e)}></Menu>
+                    </ListItem>
 
-                <Divider />
-                <ListItem>
-                    <ListItemIcon>
-                        <BookIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Some Description About Algorithm"
-                        secondary="asfasfmc.ngkresjg jrgbkjrvgkjcrngjkergbkjergbjkdf vdn vjdsbgjkergbjdsv dsjgbkjsb vjnd djfg jh vdjnjdhg jdfv jdhrgvb d jdrhg jvh"
-                    >
+                    <Divider />
+                    <ListItem>
+                        <ListItemIcon>
+                            <BookIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Some Description About Algorithm"
+                            secondary="asfasfmc.ngkresjg jrgbkjrvgkjcrngjkergbkjergbjkdf vdn vjdsbgjkergbjdsv dsjgbkjsb vjnd djfg jh vdjnjdhg jdfv jdhrgvb d jdrhg jvh"
+                        >
 
-                    </ListItemText>
-                </ListItem>
+                        </ListItemText>
+                    </ListItem>
 
-                <Divider />
-                <ListItem>
-                    <ListItemIcon>
-                        <AddNodeIcon fontSize="large" />
-                    </ListItemIcon>
-                    <ListItemText primary="Add a New Node"></ListItemText>
-                    <IconButton>
-                        <AddNodeIcon />
-                    </IconButton>
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon>
-                        <UndirectedEdgeIcon fontSize="large" />
-                    </ListItemIcon>
-                    <ListItemText primary="Add Undirected Edge From"></ListItemText>
-                    <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
-                    <ListItemText primary="To"></ListItemText>
-                    <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
-                    <IconButton disabled>
-                        <AddNodeIcon />
-                    </IconButton>
-                </ListItem>
-                <ListItem>
-                    <ListItemIcon>
-                        <DirectedEdgeIcon fontSize="large" />
-                    </ListItemIcon>
-                    <ListItemText primary="Add Directed Edge From"></ListItemText>
-                    <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
-                    <ListItemText primary="To"></ListItemText>
-                    <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
-                    <IconButton disabled>
-                        <AddNodeIcon />
-                    </IconButton>
-                </ListItem>
-                <Divider />
+                    <Divider />
+                    <ListItem>
+                        <ListItemIcon>
+                            <AddNodeIcon fontSize="large" />
+                        </ListItemIcon>
+                        <ListItemText primary="Add a New Node"></ListItemText>
+                        <IconButton>
+                            <AddNodeIcon />
+                        </IconButton>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <UndirectedEdgeIcon fontSize="large" />
+                        </ListItemIcon>
+                        <ListItemText primary="Add Undirected Edge From"></ListItemText>
+                        <Menu selectedOption="1" options={['1', '2', '3']} ></Menu>&nbsp;
+                        <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
+                        <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
+                        <IconButton disabled>
+                            <AddNodeIcon />
+                        </IconButton>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <DirectedEdgeIcon fontSize="large" />
+                        </ListItemIcon>
+                        <ListItemText primary="Add Directed Edge From"></ListItemText>
+                        <Menu selectedOption="1" options={['1', '2', '3']}></Menu>&nbsp;
+                        <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
+                        <Menu selectedOption="1" options={['1', '2', '3']}></Menu>
+                        <IconButton disabled>
+                            <AddNodeIcon />
+                        </IconButton>
+                    </ListItem>
+                    <Divider />
 
-            </List>
+                </List>
+            </div>
+            {/* <div className={classes.visualizeButtonContainer}> */}
+            <Grid
+                container
+                direction="column"
+                justify="space-between"
+                alignItems="center"
+                className={classes.visualizeButtonContainer}
+            >
+                <Button variant="contained" color="secondary" size="large">VISUALIZE</Button>
+                &nbsp;
+                <Grid
+                    // container
+                    direction="row"
+                    justify="space-around"
+                //alignItems="center"
+                //className={classes.visualizeButtonContainer}
+                >
+                    <Button variant="contained" color="primary" disabled size="large">RESET</Button>
+                    &nbsp;&nbsp;
+                    <Button variant="contained" color="primary" disabled size="large">CLEAR</Button>
+
+                </Grid>
+            </Grid>
+            {/* </div> */}
+            {/* <div className={classes.visualizeButton}> */}
+            {/* </div> */}
+
             {/* <Grid container spacing="1">
                 <Grid justify="center">
                     Select Algorithm - <Menu open={algorithmMenuOpen} options={AlgorithmOptions}></Menu>
