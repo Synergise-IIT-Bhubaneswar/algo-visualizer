@@ -32,7 +32,7 @@ const CustomMenu = props => {
                     },
                 }}
             >
-                {props.options.map((option) => (
+                {props?.options && props.options.map((option) => (
                     <MenuItem key={option} selected={option === props.selectedOption} onClick={() => props.selectOption(option)}>
                         {option}
                     </MenuItem>
