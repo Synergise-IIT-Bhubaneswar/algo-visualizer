@@ -78,6 +78,11 @@ const CustomDrawer = (props) => {
     //     nodeIndices = [...Array(props.canvasRef.current.state.noOfVertices).keys()]
     // }, [props.canvasRef.current.state.noOfVertices])
     console.log(props.canvasRef, nodeIndices)
+    const closeMenu = () => {
+        setAlgorithmMenuAnchor(null);
+        setAddUndEdgeFromMenuAnchor(null)
+        setAddUndEdgeToMenuAnchor(null)
+    };
     const openAlgorithmMenu = (e) => {
         setAlgorithmMenuAnchor(e.currentTarget);
     };
@@ -90,21 +95,31 @@ const CustomDrawer = (props) => {
         setAddUndEdgeToMenuAnchor(e.currentTarget)
     }
 
-    const closeMenu = () => {
-        setAlgorithmMenuAnchor(null);
-        setAddUndEdgeFromMenuAnchor(null)
-        setAddUndEdgeToMenuAnchor(null)
-    };
 
     const selectAlgorithm = (algorithm) => {
         props.selectAlgorithm(algorithm);
+        closeMenu()
     };
 
     const selectUndEdgeFrom = (from) => {
         setUndEdgeFrom(from)
+        closeMenu()
     }
     const selectUndEdgeTo = (to) => {
         setUndEdgeTo(to)
+        closeMenu()
+    }
+
+    const addUndirectedEdge = (from, to) => {
+        props.canvasRef.current.addEdge(from, to)
+        setUndEdgeFrom("From")
+        setUndEdgeTo("To")
+    }
+
+    const clearCanvas = () => {
+        props.canvasRef.current.clearCanvas()
+        setUndEdgeFrom("From")
+        setUndEdgeTo("To")
     }
     return (
         <Drawer
@@ -191,7 +206,9 @@ const CustomDrawer = (props) => {
                             close={closeMenu}
                             click={(e) => openUndEdgeToMenu(e)}
                         ></Menu>
-                        <IconButton onClick={() => props.canvasRef.current.addEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))} disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
+                        <IconButton
+                            onClick={() => addUndirectedEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))}
+                            disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
                             <AddNodeIcon />
                         </IconButton>
                     </ListItem>
@@ -233,7 +250,7 @@ const CustomDrawer = (props) => {
                         RESET
                     </Button>
                     &nbsp;&nbsp;
-                    <Button variant="contained" color="primary" disabled size="large">
+                    <Button variant="contained" color="primary" size="large" onClick={() => clearCanvas()}>
                         CLEAR
                     </Button>
                 </Grid>

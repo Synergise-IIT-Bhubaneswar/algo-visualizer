@@ -81,6 +81,18 @@ class Canvas extends React.Component {
     });
   };
 
+  clearCanvas = () => {
+    this.noOfEdges = 0;
+    this.edgeRefs = [];
+    this.vertexRefs = [];
+    this.adjList = [];
+    this.setState({
+      noOfVertices: 0,
+      vertices: [],
+      edges: [],
+    })
+  }
+
   // myfun1 = (e) => {
   //   this.setState({ fromVertex: e.target.value });
   // };
