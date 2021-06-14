@@ -183,15 +183,15 @@ const CustomDrawer = (props) => {
                             click={(e) => openUndEdgeFromMenu(e)}></Menu>&nbsp;
                         <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
                         <Menu
-                        //   selectedOption={undEdgeFrom}
-                        //   options={nodeIndices}
-                        //   selectOption={selectUndEdgeFrom}
-                        //   open={addUndEdgeFromMenuOpen}
-                        //   anchor={addUndEdgeFromMenuAnchor}
-                        //   close={closeMenu}
-                        //   click={(e) => openUndEdgeFromMenu(e)}
+                            selectedOption={undEdgeTo}
+                            options={nodeIndices}
+                            selectOption={selectUndEdgeTo}
+                            open={addUndEdgeToMenuOpen}
+                            anchor={addUndEdgeToMenuAnchor}
+                            close={closeMenu}
+                            click={(e) => openUndEdgeToMenu(e)}
                         ></Menu>
-                        <IconButton disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
+                        <IconButton onCLick={() => props.canvasRef.current.addEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))} disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
                             <AddNodeIcon />
                         </IconButton>
                     </ListItem>

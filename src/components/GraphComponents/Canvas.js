@@ -14,8 +14,6 @@ class Canvas extends React.Component {
       noOfVertices: 0,
       vertices: [],
       edges: [],
-      fromVertex: -1,
-      toVertex: -1,
     };
   }
 
@@ -51,9 +49,8 @@ class Canvas extends React.Component {
     });
   };
 
-  addEdge = () => {
-    const n1 = this.state.fromVertex;
-    const n2 = this.state.toVertex;
+  addEdge = (n1, n2) => {
+
     const newEdgeRef = React.createRef();
     var newEdges = this.state.edges.map((edge) => edge);
 
@@ -81,22 +78,20 @@ class Canvas extends React.Component {
 
     this.setState({
       edges: newEdges,
-      fromVertex: -1,
-      toVertex: -1,
     });
   };
 
-  myfun1 = (e) => {
-    this.setState({ fromVertex: e.target.value });
-  };
-  myfun2 = (e) => {
-    this.setState({ toVertex: e.target.value });
-  };
+  // myfun1 = (e) => {
+  //   this.setState({ fromVertex: e.target.value });
+  // };
+  // myfun2 = (e) => {
+  //   this.setState({ toVertex: e.target.value });
+  // };
 
   render() {
     return (
       <div className="graph">
-        <div style={{ position: "fixed", margin: "100px" }}>
+        {/* <div style={{ position: "fixed", margin: "100px" }}>
           <button onClick={this.addVertex}> Add node</button>
           <div>
             <input />
@@ -107,7 +102,7 @@ class Canvas extends React.Component {
           </div>
           <p>No of vertices: {this.state.noOfVertices}</p>
           <button onClick={this.addEdge}> Add edge</button>
-        </div>
+        </div> */}
         {this.state.vertices}
         {this.state.edges}
       </div>
