@@ -2,7 +2,8 @@ import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
 
-class Graph extends React.Component {
+const vertexRadius = 25;
+class Canvas extends React.Component {
   constructor(props) {
     super(props);
     this.noOfEdges = 0;
@@ -58,14 +59,15 @@ class Graph extends React.Component {
 
     const position1 = this.vertexRefs[n1].current.state.styles;
     const position2 = this.vertexRefs[n2].current.state.styles;
+    console.log(this.vertexRefs[n1].current);
     newEdges.push(
       <Edge
         ref={newEdgeRef}
         key={this.noOfEdges}
-        X1={position1.left}
-        Y1={position1.top}
-        X2={position2.left}
-        Y2={position2.top}
+        X1={position1.left + vertexRadius}
+        Y1={position1.top + vertexRadius}
+        X2={position2.left + vertexRadius}
+        Y2={position2.top + vertexRadius}
       />
     );
 
@@ -113,4 +115,4 @@ class Graph extends React.Component {
   }
 }
 
-export default Graph;
+export default Canvas;
