@@ -62,13 +62,22 @@ const CustomDrawer = (props) => {
     const addUndEdgeFromMenuOpen = Boolean(addUndEdgeFromMenuAnchor);
     const [addUndEdgeToMenuAnchor, setAddUndEdgeToMenuAnchor] = useState(null);
     const addUndEdgeToMenuOpen = Boolean(addUndEdgeToMenuAnchor);
+    const [nodeIndices, setNodeIndices] = useState([])
 
-    const nodeIndices = []
+    //const nodeIndices = []
+    useEffect(() => {
+        const newNodeIndices = []
+        for (let i = 0; i < props.canvasRef.current.state.noOfVertices; i++) {
+            newNodeIndices.push(i);
+        }
+        console.log("useEff")
+        setNodeIndices(newNodeIndices)
+    }, [props.canvasRef.current ? props.canvasRef.current.state.noOfVertices : props.canvasRef.current])
     // [...Array(props.canvasRef.current.state.noOfVertices).keys()]
     // useEffect(() => {
     //     nodeIndices = [...Array(props.canvasRef.current.state.noOfVertices).keys()]
     // }, [props.canvasRef.current.state.noOfVertices])
-    // console.log(props.canvasRef.current.state.noOfVertices)
+    console.log(props.canvasRef, nodeIndices)
     const openAlgorithmMenu = (e) => {
         setAlgorithmMenuAnchor(e.currentTarget);
     };
@@ -166,7 +175,7 @@ const CustomDrawer = (props) => {
                         <ListItemText primary="Add Undirected Edge"></ListItemText>
                         <Menu
                             selectedOption={undEdgeFrom}
-                            options={[1, 2, 3]}
+                            options={nodeIndices}
                             selectOption={selectUndEdgeFrom}
                             open={addUndEdgeFromMenuOpen}
                             anchor={addUndEdgeFromMenuAnchor}
