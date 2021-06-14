@@ -191,7 +191,7 @@ const CustomDrawer = (props) => {
                             close={closeMenu}
                             click={(e) => openUndEdgeToMenu(e)}
                         ></Menu>
-                        <IconButton onCLick={() => props.canvasRef.current.addEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))} disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
+                        <IconButton onClick={() => props.canvasRef.current.addEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))} disabled={(undEdgeFrom === undEdgeTo) || undEdgeFrom === "From" || undEdgeTo === "To"}>
                             <AddNodeIcon />
                         </IconButton>
                     </ListItem>
@@ -200,9 +200,9 @@ const CustomDrawer = (props) => {
                             <DirectedEdgeIcon fontSize="large" />
                         </ListItemIcon>
                         <ListItemText primary="Add Directed Edge From"></ListItemText>
-                        <Menu selectedOption="1" options={["1", "2", "3"]}></Menu>&nbsp;
+                        <Menu selectedOption="1" options={["1", "2", "3"]} open={false} anchor={null} close={closeMenu}></Menu>&nbsp;
                         <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
-                        <Menu selectedOption="1" options={["1", "2", "3"]}></Menu>
+                        <Menu selectedOption="1" options={["1", "2", "3"]} open={false} anchor={null} close={closeMenu}></Menu>
                         <IconButton disabled>
                             <AddNodeIcon />
                         </IconButton>
@@ -223,7 +223,7 @@ const CustomDrawer = (props) => {
                 </Button>
                 &nbsp;
                 <Grid
-                    // container
+                    container
                     direction="row"
                     justify="space-around"
                 //alignItems="center"
