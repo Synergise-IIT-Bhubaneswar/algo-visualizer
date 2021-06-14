@@ -22,7 +22,6 @@ class Vertex extends Component {
     });
   };
   dragEnd = () => {
-    console.log("hi");
     this.isDragging = false;
     this.setState({
       styles: {
