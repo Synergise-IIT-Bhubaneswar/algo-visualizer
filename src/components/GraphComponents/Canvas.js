@@ -45,8 +45,6 @@ class Canvas extends React.Component {
     this.vertexRefs.set(uniqueID, newVertexRef);
     this.adjList.push([]);
 
-    console.log(this.adjList);
-
     this.setState({
       vertices: newVertices,
       noOfVertices: this.state.noOfVertices + 1,
@@ -54,7 +52,6 @@ class Canvas extends React.Component {
   };
 
   addEdge = (n1, n2) => {
-    console.log("Adding edge");
     const newEdgeRef = React.createRef();
     const uniqueID = uuidv4();
     var newEdges = this.state.edges.map((edge) => edge);
@@ -86,11 +83,11 @@ class Canvas extends React.Component {
     this.edgeRefs = new Map();
     this.vertexRefs = new Map();
     this.adjList = [];
-    this.setState = {
+    this.setState({
       noOfVertices: 0,
       vertices: [],
       edges: [],
-    };
+    });
   };
 
   // check for optimisation
