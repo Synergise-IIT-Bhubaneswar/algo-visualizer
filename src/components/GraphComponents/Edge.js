@@ -1,28 +1,32 @@
 import React from "react";
 
+const vertexRadius = 25;
 class Edge extends React.Component {
   constructor(props) {
     super(props);
+    this.n1ID = this.props.n1Ref.current.id;
+    this.n2ID = this.props.n2Ref.current.id;
     this.state = {
-      X1: this.props.X1,
-      Y1: this.props.Y1,
-      X2: this.props.X2,
-      Y2: this.props.Y2,
+      X1: this.props.n1Ref.current.state.styles.left + vertexRadius,
+      Y1: this.props.n1Ref.current.state.styles.top + vertexRadius,
+      X2: this.props.n2Ref.current.state.styles.left + vertexRadius,
+      Y2: this.props.n2Ref.current.state.styles.top + vertexRadius,
       styles: { stroke: "black" },
     };
   }
 
-  changePosition1 = (x, y) => {
-    this.setState({
-      X1: x,
-      Y1: y,
-    });
-  };
-  changePosition2 = (x, y) => {
-    this.setState({
-      X2: x,
-      Y2: y,
-    });
+  changePosition = (id, x, y) => {
+    if (id === this.n1ID) {
+      this.setState({
+        X1: x,
+        Y1: y,
+      });
+    } else {
+      this.setState({
+        X2: x,
+        Y2: y,
+      });
+    }
   };
 
   changeBackgroundColor = (color) => {

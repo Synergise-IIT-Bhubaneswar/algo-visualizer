@@ -1,14 +1,14 @@
+import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
 
-const vertexRadius = 25;
 class Canvas extends React.Component {
   constructor(props) {
     super(props);
-    this.noOfEdges = 0;
-    this.edgeRefs = [];
-    this.vertexRefs = [];
+    this.vertexIDs = [];
+    this.edgeRefs = new Map();
+    this.vertexRefs = new Map();
     this.adjList = [];
     this.state = {
       noOfVertices: 0,
@@ -17,32 +17,36 @@ class Canvas extends React.Component {
     };
   }
 
-  moveEdge = (nodeIndex, x, y) => {
+  moveEdge = (vertexIndex, x, y) => {
     var i;
-    for (i = 0; i < this.edgeRefs[nodeIndex].length; i++) {
-      if (this.edgeRefs[nodeIndex][i][1] === "pos1") {
-        this.edgeRefs[nodeIndex][i][0].current.changePosition1(x, y);
-      } else {
-        this.edgeRefs[nodeIndex][i][0].current.changePosition2(x, y);
-      }
+    for (i = 0; i < this.adjList[vertexIndex].length; i++) {
+      const id = this.adjList[vertexIndex][i];
+      this.edgeRefs
+        .get(id)
+        .current.changePosition(this.vertexIDs[vertexIndex], x, y);
     }
   };
 
   addVertex = () => {
     var newVertices = this.state.vertices.map((vertex) => vertex);
     const newVertexRef = React.createRef();
+    const uniqueID = uuidv4();
     newVertices.push(
       <Vertex
         ref={newVertexRef}
-        nodeIndex={this.state.noOfVertices}
+        vertexIndex={this.state.noOfVertices}
         moveIncidentEdges={this.moveEdge}
-        key={this.state.noOfVertices}
+        uniqueID={uniqueID}
+        key={uniqueID}
       />
     );
-    this.edgeRefs.push([]);
-    this.vertexRefs.push(newVertexRef);
 
+    this.vertexIDs.push(uniqueID);
+    this.vertexRefs.set(uniqueID, newVertexRef);
     this.adjList.push([]);
+
+    console.log(this.adjList);
+
     this.setState({
       vertices: newVertices,
       noOfVertices: this.state.noOfVertices + 1,
@@ -50,31 +54,27 @@ class Canvas extends React.Component {
   };
 
   addEdge = (n1, n2) => {
-
+    console.log("Adding edge");
     const newEdgeRef = React.createRef();
+    const uniqueID = uuidv4();
     var newEdges = this.state.edges.map((edge) => edge);
 
-    const position1 = this.vertexRefs[n1].current.state.styles;
-    const position2 = this.vertexRefs[n2].current.state.styles;
-    console.log(this.vertexRefs[n1].current);
+    const n1ID = this.vertexIDs[n1];
+    const n2ID = this.vertexIDs[n2];
+
     newEdges.push(
       <Edge
         ref={newEdgeRef}
-        key={this.noOfEdges}
-        X1={position1.left + vertexRadius}
-        Y1={position1.top + vertexRadius}
-        X2={position2.left + vertexRadius}
-        Y2={position2.top + vertexRadius}
+        key={uniqueID}
+        n1Ref={this.vertexRefs.get(n1ID)}
+        n2Ref={this.vertexRefs.get(n2ID)}
       />
     );
 
-    this.noOfEdges = this.noOfEdges + 1;
+    this.edgeRefs.set(uniqueID, newEdgeRef);
 
-    this.edgeRefs[n1].push([newEdgeRef, "pos1"]);
-    this.edgeRefs[n2].push([newEdgeRef, "pos2"]);
-
-    this.adjList[n1].push(n2);
-    this.adjList[n2].push(n1);
+    this.adjList[n1].push(uniqueID);
+    this.adjList[n2].push(uniqueID);
 
     this.setState({
       edges: newEdges,
@@ -82,39 +82,69 @@ class Canvas extends React.Component {
   };
 
   clearCanvas = () => {
-    this.noOfEdges = 0;
-    this.edgeRefs = [];
-    this.vertexRefs = [];
+    this.vertexIDs = [];
+    this.edgeRefs = new Map();
+    this.vertexRefs = new Map();
     this.adjList = [];
-    this.setState({
+    this.setState = {
       noOfVertices: 0,
       vertices: [],
       edges: [],
-    })
-  }
+    };
+  };
 
-  // myfun1 = (e) => {
-  //   this.setState({ fromVertex: e.target.value });
-  // };
-  // myfun2 = (e) => {
-  //   this.setState({ toVertex: e.target.value });
-  // };
+  // check for optimisation
+  deleteVertex = (vertexIndex) => {
+    const uniqueID = this.vertexIDs[vertexIndex];
+    this.vertexRefs.delete(uniqueID);
+
+    const incidentEdges = this.adjList[vertexIndex];
+    var i;
+    for (i = 0; i < incidentEdges.length; i++) {
+      const edgeID = incidentEdges[i];
+      const edgeRef = this.edgeRefs.get(edgeID);
+      this.edgeRefs.delete(incidentEdges[i]);
+      const connectedVertexID =
+        edgeRef.current.n1ID === uniqueID
+          ? edgeRef.current.n2ID
+          : edgeRef.current.n1ID;
+
+      const connectedVertexIndex = this.vertexIDs.indexOf(connectedVertexID);
+
+      this.adjList[connectedVertexIndex] = this.adjList[
+        connectedVertexIndex
+      ].filter((id) => id !== edgeID);
+    }
+
+    this.vertexIDs.splice(vertexIndex, 1);
+    this.adjList.splice(vertexIndex, 1);
+
+    for (i = vertexIndex; i < this.state.noOfVertices - 1; i++) {
+      const ind = this.vertexRefs.get(this.vertexIDs[i]).current.state
+        .vertexIndex;
+      if (ind > vertexIndex) {
+        this.vertexRefs
+          .get(this.vertexIDs[i])
+          .current.changeVertexIndex(ind - 1);
+      }
+    }
+
+    this.setState({
+      noOfVertices: this.state.noOfVertices - 1,
+      vertices: this.state.vertices.filter(
+        (vertex) => vertex.props.uniqueID !== uniqueID
+      ),
+      edges: this.state.edges.filter(
+        (edge) =>
+          edge.props.n1Ref.current.id !== uniqueID &&
+          edge.props.n2Ref.current.id !== uniqueID
+      ),
+    });
+  };
 
   render() {
     return (
       <div className="graph">
-        {/* <div style={{ position: "fixed", margin: "100px" }}>
-          <button onClick={this.addVertex}> Add node</button>
-          <div>
-            <input />
-            <label>From Node</label>
-            <input value={this.state.fromVertex} onChange={this.myfun1} />
-            <label>To Node</label>
-            <input value={this.state.toVertex} onChange={this.myfun2} />
-          </div>
-          <p>No of vertices: {this.state.noOfVertices}</p>
-          <button onClick={this.addEdge}> Add edge</button>
-        </div> */}
         {this.state.vertices}
         {this.state.edges}
       </div>

@@ -3,10 +3,14 @@ import React, { Component } from "react";
 class Vertex extends Component {
   constructor(props) {
     super(props);
+    this.id = this.props.uniqueID;
     this.diffX = 0;
     this.diffY = 0;
     this.isDragging = false;
-    this.state = { styles: { left: 500, top: 300, backgroundColor: "aqua" } };
+    this.state = {
+      vertexIndex: this.props.vertexIndex,
+      styles: { left: 500, top: 300, backgroundColor: "aqua" },
+    };
   }
 
   dragStart = (e) => {
@@ -21,6 +25,7 @@ class Vertex extends Component {
       },
     });
   };
+
   dragEnd = () => {
     this.isDragging = false;
     this.setState({
@@ -47,7 +52,7 @@ class Vertex extends Component {
       // changing edge position when node moves
       const pos = e.currentTarget.getBoundingClientRect();
       this.props.moveIncidentEdges(
-        this.props.nodeIndex,
+        this.state.vertexIndex,
         (pos.left + pos.right) / 2,
         (pos.top + pos.bottom) / 2
       );
@@ -64,6 +69,12 @@ class Vertex extends Component {
     });
   };
 
+  changeVertexIndex = (n) => {
+    this.setState({
+      vertexIndex: n,
+    });
+  };
+
   render() {
     return (
       <div
@@ -73,7 +84,7 @@ class Vertex extends Component {
         onMouseMove={this.dragging}
         onMouseUp={this.dragEnd}
       >
-        <h3>{this.props.nodeIndex} </h3>
+        <h3>{this.state.vertexIndex} </h3>
       </div>
     );
   }
