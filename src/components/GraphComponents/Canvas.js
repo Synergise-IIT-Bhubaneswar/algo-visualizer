@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
+import DfsVisulization from "../../algorithms/DFS/DfsVisulization";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -9,21 +10,20 @@ class Canvas extends React.Component {
     this.vertexIDs = [];
     this.edgeRefs = new Map();
     this.vertexRefs = new Map();
-    this.adjList = [];
+    this.adjList = new Map();
     this.state = {
+      visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
     };
   }
 
-  moveEdge = (vertexIndex, x, y) => {
+  moveEdge = (vertexID, x, y) => {
     var i;
-    for (i = 0; i < this.adjList[vertexIndex].length; i++) {
-      const id = this.adjList[vertexIndex][i];
-      this.edgeRefs
-        .get(id)
-        .current.changePosition(this.vertexIDs[vertexIndex], x, y);
+    for (i = 0; i < this.adjList.get(vertexID).length; i++) {
+      const id = this.adjList.get(vertexID)[i];
+      this.edgeRefs.get(id).current.changePosition(vertexID, x, y);
     }
   };
 
@@ -43,7 +43,7 @@ class Canvas extends React.Component {
 
     this.vertexIDs.push(uniqueID);
     this.vertexRefs.set(uniqueID, newVertexRef);
-    this.adjList.push([]);
+    this.adjList.set(uniqueID, []);
 
     this.setState({
       vertices: newVertices,
@@ -70,8 +70,8 @@ class Canvas extends React.Component {
 
     this.edgeRefs.set(uniqueID, newEdgeRef);
 
-    this.adjList[n1].push(uniqueID);
-    this.adjList[n2].push(uniqueID);
+    this.adjList.get(n1ID).push(uniqueID);
+    this.adjList.get(n2ID).push(uniqueID);
 
     this.setState({
       edges: newEdges,
@@ -82,8 +82,9 @@ class Canvas extends React.Component {
     this.vertexIDs = [];
     this.edgeRefs = new Map();
     this.vertexRefs = new Map();
-    this.adjList = [];
+    this.adjList = new Map();
     this.setState({
+      visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
@@ -95,26 +96,23 @@ class Canvas extends React.Component {
     const uniqueID = this.vertexIDs[vertexIndex];
     this.vertexRefs.delete(uniqueID);
 
-    const incidentEdges = this.adjList[vertexIndex];
+    const incidentEdges = this.adjList.get(uniqueID);
     var i;
     for (i = 0; i < incidentEdges.length; i++) {
       const edgeID = incidentEdges[i];
       const edgeRef = this.edgeRefs.get(edgeID);
       this.edgeRefs.delete(incidentEdges[i]);
-      const connectedVertexID =
-        edgeRef.current.n1ID === uniqueID
-          ? edgeRef.current.n2ID
-          : edgeRef.current.n1ID;
+      const connectedVertexID = edgeRef.current.getOtherVertexID(uniqueID);
 
-      const connectedVertexIndex = this.vertexIDs.indexOf(connectedVertexID);
+      const updatedNeighbour = this.adjList
+        .get(connectedVertexID)
+        .filter((id) => id !== edgeID);
 
-      this.adjList[connectedVertexIndex] = this.adjList[
-        connectedVertexIndex
-      ].filter((id) => id !== edgeID);
+      this.adjList.set(connectedVertexID, updatedNeighbour);
     }
 
     this.vertexIDs.splice(vertexIndex, 1);
-    this.adjList.splice(vertexIndex, 1);
+    this.adjList.delete(uniqueID);
 
     for (i = vertexIndex; i < this.state.noOfVertices - 1; i++) {
       const ind = this.vertexRefs.get(this.vertexIDs[i]).current.state
@@ -139,11 +137,32 @@ class Canvas extends React.Component {
     });
   };
 
+  // add code for getting starting vertex as input
+  startVisualizing = () => {
+    this.setState({ visualize: true });
+  };
+
+  reset = () => {
+    this.vertexRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
+    this.edgeRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
+    this.setState({ visualize: false });
+  };
+
   render() {
     return (
       <div className="graph">
         {this.state.vertices}
         {this.state.edges}
+        {this.state.visualize ? (
+          <DfsVisulization
+            startingVertex={0}
+            noOfVertices={this.state.noOfVertices}
+            vertexIDs={this.vertexIDs}
+            vertexRefs={this.vertexRefs}
+            edgeRefs={this.edgeRefs}
+            adjList={this.adjList}
+          />
+        ) : null}
       </div>
     );
   }

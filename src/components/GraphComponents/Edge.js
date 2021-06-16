@@ -29,6 +29,12 @@ class Edge extends React.Component {
     }
   };
 
+  getOtherVertexID = (id) => {
+    if (id === this.n1ID) return this.n2ID;
+    else if (id === this.n2ID) return this.n1ID;
+    else return null;
+  };
+
   changeBackgroundColor = (color) => {
     this.setState({
       styles: {
