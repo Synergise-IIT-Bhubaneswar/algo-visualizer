@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 
+const vertexRadius = 25;
 class Vertex extends Component {
   constructor(props) {
     super(props);
     this.id = this.props.uniqueID;
-    this.diffX = 0;
-    this.diffY = 0;
     this.isDragging = false;
     this.state = {
       vertexIndex: this.props.vertexIndex,
@@ -14,9 +13,10 @@ class Vertex extends Component {
   }
 
   dragStart = (e) => {
-    this.diffX = e.screenX - e.currentTarget.getBoundingClientRect().left;
-    this.diffY = e.screenY - e.currentTarget.getBoundingClientRect().top;
     this.isDragging = true;
+    document.onmousemove = this.dragging;
+    document.onmouseup = this.dragEnd;
+
     this.setState({
       styles: {
         left: this.state.styles.left,
@@ -28,6 +28,7 @@ class Vertex extends Component {
 
   dragEnd = () => {
     this.isDragging = false;
+    document.onmousemove = null;
     this.setState({
       styles: {
         left: this.state.styles.left,
@@ -39,8 +40,8 @@ class Vertex extends Component {
 
   dragging = (e) => {
     if (this.isDragging) {
-      const newLeft = e.screenX - this.diffX;
-      const newTop = e.screenY - this.diffY;
+      const newLeft = e.clientX - vertexRadius;
+      const newTop = e.clientY - vertexRadius;
       this.setState({
         styles: {
           left: newLeft,
@@ -50,11 +51,10 @@ class Vertex extends Component {
       });
 
       // changing edge position when node moves
-      const pos = e.currentTarget.getBoundingClientRect();
       this.props.moveIncidentEdges(
         this.state.vertexIndex,
-        (pos.left + pos.right) / 2,
-        (pos.top + pos.bottom) / 2
+        newLeft + vertexRadius,
+        newTop + vertexRadius
       );
     }
   };
