@@ -6,6 +6,7 @@ class Vertex extends Component {
     super(props);
     this.id = this.props.uniqueID;
     this.isDragging = false;
+    this.previousColor = "aqua";
     this.state = {
       vertexIndex: this.props.vertexIndex,
       styles: { left: 500, top: 300, backgroundColor: "aqua" },
@@ -17,6 +18,7 @@ class Vertex extends Component {
     document.onmousemove = this.dragging;
     document.onmouseup = this.dragEnd;
 
+    this.previousColor = this.state.styles.backgroundColor;
     this.setState({
       styles: {
         left: this.state.styles.left,
@@ -33,7 +35,7 @@ class Vertex extends Component {
       styles: {
         left: this.state.styles.left,
         top: this.state.styles.top,
-        backgroundColor: "aqua",
+        backgroundColor: this.previousColor,
       },
     });
   };
@@ -52,7 +54,7 @@ class Vertex extends Component {
 
       // changing edge position when node moves
       this.props.moveIncidentEdges(
-        this.state.vertexIndex,
+        this.id,
         newLeft + vertexRadius,
         newTop + vertexRadius
       );
