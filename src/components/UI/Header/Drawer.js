@@ -67,13 +67,12 @@ const CustomDrawer = (props) => {
   const theme = useTheme();
   const [algorithmMenuAnchor, setAlgorithmMenuAnchor] = useState(null);
   const algorithmMenuOpen = Boolean(algorithmMenuAnchor);
-  const [addUndEdgeFromMenuAnchor, setAddUndEdgeFromMenuAnchor] =
-    useState(null);
-  const [undEdgeFrom, setUndEdgeFrom] = useState("From");
-  const [undEdgeTo, setUndEdgeTo] = useState("To");
-  const addUndEdgeFromMenuOpen = Boolean(addUndEdgeFromMenuAnchor);
-  const [addUndEdgeToMenuAnchor, setAddUndEdgeToMenuAnchor] = useState(null);
-  const addUndEdgeToMenuOpen = Boolean(addUndEdgeToMenuAnchor);
+  const [addEdgeFromMenuAnchor, setaddEdgeFromMenuAnchor] = useState(null);
+  const [edgeFrom, setEdgeFrom] = useState("From");
+  const [edgeTo, setEdgeTo] = useState("To");
+  const addEdgeFromMenuOpen = Boolean(addEdgeFromMenuAnchor);
+  const [addEdgeToMenuAnchor, setaddEdgeToMenuAnchor] = useState(null);
+  const addEdgeToMenuOpen = Boolean(addEdgeToMenuAnchor);
   const [nodeIndices, setNodeIndices] = useState([]);
   const [deleteNode, setDeleteNode] = useState("Index");
   const [deleteNodeMenuAnchor, setDeleteNodeMenuAnchor] = useState(null);
@@ -99,20 +98,20 @@ const CustomDrawer = (props) => {
   //console.log(props.canvasRef, nodeIndices);
   const closeMenu = () => {
     setAlgorithmMenuAnchor(null);
-    setAddUndEdgeFromMenuAnchor(null);
-    setAddUndEdgeToMenuAnchor(null);
+    setaddEdgeFromMenuAnchor(null);
+    setaddEdgeToMenuAnchor(null);
     setDeleteNodeMenuAnchor(null);
   };
   const openAlgorithmMenu = (e) => {
     setAlgorithmMenuAnchor(e.currentTarget);
   };
 
-  const openUndEdgeFromMenu = (e) => {
-    setAddUndEdgeFromMenuAnchor(e.currentTarget);
+  const openEdgeFromMenu = (e) => {
+    setaddEdgeFromMenuAnchor(e.currentTarget);
   };
 
-  const openUndEdgeToMenu = (e) => {
-    setAddUndEdgeToMenuAnchor(e.currentTarget);
+  const openEdgeToMenu = (e) => {
+    setaddEdgeToMenuAnchor(e.currentTarget);
   };
 
   const selectAlgorithm = (algorithm) => {
@@ -120,19 +119,19 @@ const CustomDrawer = (props) => {
     closeMenu();
   };
 
-  const selectUndEdgeFrom = (from) => {
-    setUndEdgeFrom(from);
+  const selectEdgeFrom = (from) => {
+    setEdgeFrom(from);
     closeMenu();
   };
-  const selectUndEdgeTo = (to) => {
-    setUndEdgeTo(to);
+  const selectEdgeTo = (to) => {
+    setEdgeTo(to);
     closeMenu();
   };
 
-  const addUndirectedEdge = (from, to) => {
-    props.canvasRef.current.addEdge(from, to);
-    setUndEdgeFrom("From");
-    setUndEdgeTo("To");
+  const addEdge = (from, to, isDirected) => {
+    props.canvasRef.current.addEdge(from, to, isDirected);
+    setEdgeFrom("From");
+    setEdgeTo("To");
   };
 
   const openDeleteNodeMenu = (e) => {
@@ -146,8 +145,8 @@ const CustomDrawer = (props) => {
 
   const clearCanvas = () => {
     props.canvasRef.current.clearCanvas();
-    setUndEdgeFrom("From");
-    setUndEdgeTo("To");
+    setEdgeFrom("From");
+    setEdgeTo("To");
   };
 
   return (
@@ -242,33 +241,31 @@ const CustomDrawer = (props) => {
             </ListItemIcon>
             <ListItemText primary="Add Undirected Edge"></ListItemText>
             <Menu
-              selectedOption={undEdgeFrom}
+              selectedOption={edgeFrom}
               options={nodeIndices}
-              selectOption={selectUndEdgeFrom}
-              open={addUndEdgeFromMenuOpen}
-              anchor={addUndEdgeFromMenuAnchor}
+              selectOption={selectEdgeFrom}
+              open={addEdgeFromMenuOpen}
+              anchor={addEdgeFromMenuAnchor}
               close={closeMenu}
-              click={(e) => openUndEdgeFromMenu(e)}
+              click={(e) => openEdgeFromMenu(e)}
             ></Menu>
             &nbsp;
             <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
             <Menu
-              selectedOption={undEdgeTo}
+              selectedOption={edgeTo}
               options={nodeIndices}
-              selectOption={selectUndEdgeTo}
-              open={addUndEdgeToMenuOpen}
-              anchor={addUndEdgeToMenuAnchor}
+              selectOption={selectEdgeTo}
+              open={addEdgeToMenuOpen}
+              anchor={addEdgeToMenuAnchor}
               close={closeMenu}
-              click={(e) => openUndEdgeToMenu(e)}
+              click={(e) => openEdgeToMenu(e)}
             ></Menu>
             <IconButton
               onClick={() =>
-                addUndirectedEdge(parseInt(undEdgeFrom), parseInt(undEdgeTo))
+                addEdge(parseInt(edgeFrom), parseInt(edgeTo), false)
               }
               disabled={
-                undEdgeFrom === undEdgeTo ||
-                undEdgeFrom === "From" ||
-                undEdgeTo === "To"
+                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To"
               }
             >
               <AddNodeIcon />
@@ -280,22 +277,33 @@ const CustomDrawer = (props) => {
             </ListItemIcon>
             <ListItemText primary="Add Directed Edge From"></ListItemText>
             <Menu
-              selectedOption="1"
-              options={["1", "2", "3"]}
-              open={false}
-              anchor={null}
+              selectedOption={edgeFrom}
+              options={nodeIndices}
+              selectOption={selectEdgeFrom}
+              open={addEdgeFromMenuOpen}
+              anchor={addEdgeFromMenuAnchor}
               close={closeMenu}
+              click={(e) => openEdgeFromMenu(e)}
             ></Menu>
             &nbsp;
             <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
             <Menu
-              selectedOption="1"
-              options={["1", "2", "3"]}
-              open={false}
-              anchor={null}
+              selectedOption={edgeTo}
+              options={nodeIndices}
+              selectOption={selectEdgeTo}
+              open={addEdgeToMenuOpen}
+              anchor={addEdgeToMenuAnchor}
               close={closeMenu}
+              click={(e) => openEdgeToMenu(e)}
             ></Menu>
-            <IconButton disabled>
+            <IconButton
+              onClick={() =>
+                addEdge(parseInt(edgeFrom), parseInt(edgeTo), true)
+              }
+              disabled={
+                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To"
+              }
+            >
               <AddNodeIcon />
             </IconButton>
           </ListItem>

@@ -47,13 +47,29 @@ class Edge extends React.Component {
     return (
       <div className="div-line">
         <svg className="svg-line">
-          <line
-            className="line"
-            style={this.state.styles}
-            x1={this.state.X1}
-            y1={this.state.Y1}
-            x2={this.state.X2}
-            y2={this.state.Y2}
+          <defs>
+            <marker
+              orient="auto"
+              id={this.props.edgeKey}
+              markerWidth={6}
+              markerHeight={4}
+              refX={3}
+              refY={2}
+            >
+              <polygon points="0 0, 6 2, 0 4" />
+            </marker>
+          </defs>
+          <polyline
+            points={`${this.state.X1},${this.state.Y1},${
+              (this.state.X1 + this.state.X2) / 2
+            },${(this.state.Y1 + this.state.Y2) / 2},${this.state.X2},${
+              this.state.Y2
+            }`}
+            stroke={this.state.styles.stroke}
+            strokeWidth="4px"
+            markerMid={
+              this.props.isDirected ? `url(#${this.props.edgeKey})` : "none"
+            }
           />
         </svg>
       </div>
