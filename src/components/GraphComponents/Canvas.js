@@ -51,7 +51,7 @@ class Canvas extends React.Component {
     });
   };
 
-  addEdge = (n1, n2) => {
+  addEdge = (n1, n2, isDirected) => {
     const newEdgeRef = React.createRef();
     const uniqueID = uuidv4();
     var newEdges = this.state.edges.map((edge) => edge);
@@ -65,6 +65,8 @@ class Canvas extends React.Component {
         key={uniqueID}
         n1Ref={this.vertexRefs.get(n1ID)}
         n2Ref={this.vertexRefs.get(n2ID)}
+        edgeKey={uniqueID}
+        isDirected={isDirected}
       />
     );
 
@@ -72,6 +74,8 @@ class Canvas extends React.Component {
 
     this.adjList.get(n1ID).push(uniqueID);
     this.adjList.get(n2ID).push(uniqueID);
+    // in algorithms check whether edge is directed or undirected
+    // this adjList is not differentiating between directed and undirected
 
     this.setState({
       edges: newEdges,
