@@ -55,6 +55,7 @@ const DfsVisulization = (props) => {
     setParent(newParent);
 
     await DFSAlgo(props.vertexIDs[props.startingVertex]);
+    props.endVisualizing()
     // props.vertexRefs
     //   .get(props.vertexIDs[props.startingVertex])
     //   .current.changeBackgroundColor("#01B878");

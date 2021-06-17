@@ -53,6 +53,7 @@ const BfsVisualization = props => {
         setVisited(newVisited);
 
         await BFS(props.vertexIDs[props.startingVertex]);
+        props.endVisualizing()
     };
 
     useEffect(() => {

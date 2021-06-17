@@ -8,6 +8,16 @@ const Layout = () => {
     AlgorithmOptions[0]
   );
 
+  const [isVisualizing, setIsVisualizing] = useState(false)
+
+  const startVisualizing = () => {
+    setIsVisualizing(true)
+  }
+
+  const endVisualizing = () => {
+    setIsVisualizing(false)
+  }
+
   const selectAlgorithm = (algorithm) => {
     setSelectedAlgorithm(algorithm);
   };
@@ -20,8 +30,13 @@ const Layout = () => {
         AlgorithmOptions={AlgorithmOptions}
         selectedAlgorithm={selectedAlgorithm}
         canvasRef={canvasRef}
+        startVisualizing={startVisualizing}
+        isVisualizing={isVisualizing}
       ></Header>
       <Canvas
+        visualizationStart={startVisualizing}
+        visualizationEnd={endVisualizing}
+        isVisualizing={isVisualizing}
         selectedAlgorithm={selectedAlgorithm}
         ref={canvasRef} />
     </div>

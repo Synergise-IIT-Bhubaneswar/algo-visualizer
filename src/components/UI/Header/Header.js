@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const drawerWidth = 400;
 
@@ -78,6 +79,11 @@ const Header = (props) => {
     setOpen(false);
   };
 
+  const startVisualizing = () => {
+    props.startVisualizing()
+    props.canvasRef.current.startVisualizing()
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -108,9 +114,13 @@ const Header = (props) => {
               variant="contained"
               color="secondary"
               size="large"
-              onClick={() => props.canvasRef.current.startVisualizing()}
+              onClick={() => startVisualizing()}
+              disabled={props.isVisualizing}
             >
-              VISUALIZE
+              VISUALIZE&nbsp;
+              {props.isVisualizing && (
+                <CircularProgress size={20} color="inherit" />
+              )}
             </Button>
 
           </Grid>

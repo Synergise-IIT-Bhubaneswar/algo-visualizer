@@ -94,6 +94,7 @@ class Canvas extends React.Component {
       vertices: [],
       edges: [],
     });
+    this.props.visualizationEnd()
   };
 
   // check for optimisation
@@ -144,13 +145,17 @@ class Canvas extends React.Component {
 
   // add code for getting starting vertex as input
   startVisualizing = () => {
-    this.setState({ visualize: true });
+    this.props.visualizationStart();
+  };
+
+  endVisualizing = () => {
+    this.props.visualizationEnd();
   };
 
   reset = () => {
     this.vertexRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
     this.edgeRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
-    this.setState({ visualize: false });
+    this.props.visualizationEnd();
   };
 
   render() {
@@ -158,7 +163,7 @@ class Canvas extends React.Component {
       <div className="graph">
         {this.state.vertices}
         {this.state.edges}
-        {this.state.visualize && this.props.selectedAlgorithm === "DFS" ? (
+        {this.props.isVisualizing && this.props.selectedAlgorithm === "DFS" ? (
           <DfsVisulization
             startingVertex={0}
             noOfVertices={this.state.noOfVertices}
@@ -166,8 +171,9 @@ class Canvas extends React.Component {
             vertexRefs={this.vertexRefs}
             edgeRefs={this.edgeRefs}
             adjList={this.adjList}
+            endVisualizing={this.endVisualizing}
           />) : null}
-        {this.state.visualize && this.props.selectedAlgorithm === "BFS" ? (
+        {this.props.isVisualizing && this.props.selectedAlgorithm === "BFS" ? (
           <BfsVisualization
             startingVertex={0}
             noOfVertices={this.state.noOfVertices}
@@ -175,6 +181,7 @@ class Canvas extends React.Component {
             vertexRefs={this.vertexRefs}
             edgeRefs={this.edgeRefs}
             adjList={this.adjList}
+            endVisualizing={this.endVisualizing}
           />
         ) : null}
       </div>
