@@ -9,8 +9,9 @@ import CustomDrawer from "./Drawer";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import Grid from "@material-ui/core/Grid";
 
-const drawerWidth = 450;
+const drawerWidth = 400;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,13 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   },
+  visualizeButtonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(2, 1, 2),
+  },
 }));
 
 const Header = (props) => {
@@ -94,6 +102,18 @@ const Header = (props) => {
           <Typography variant="h6" className={classes.title}>
             Algo-Visualizer
           </Typography>
+          <Grid
+            className={classes.visualizeButtonContainer}>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              onClick={() => props.canvasRef.current.startVisualizing()}
+            >
+              VISUALIZE
+            </Button>
+
+          </Grid>
           <Button color="inherit">Github</Button>
         </Toolbar>
       </AppBar>

@@ -19,8 +19,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
+import FormGroup from "@material-ui/core/FormGroup"
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
-const drawerWidth = 450;
+const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
   hide: {
     display: "none",
@@ -77,6 +80,7 @@ const CustomDrawer = (props) => {
   const [deleteNode, setDeleteNode] = useState("Index");
   const [deleteNodeMenuAnchor, setDeleteNodeMenuAnchor] = useState(null);
   const deleteNodeMenuOpen = Boolean(deleteNodeMenuAnchor);
+  const [isDirectedEdge, setIsDirectedEdge] = useState(false)
 
   //const nodeIndices = []
   useEffect(() => {
@@ -149,6 +153,9 @@ const CustomDrawer = (props) => {
     setEdgeTo("To");
   };
 
+  const checkDirectedEdge = () => {
+    setIsDirectedEdge(prev => !prev)
+  }
   return (
     <Drawer
       className={classes.drawer}
@@ -211,6 +218,7 @@ const CustomDrawer = (props) => {
               <AddNodeIcon />
             </IconButton>
           </ListItem>
+          <Divider />
           <ListItem>
             <ListItemIcon>
               <DeleteIcon fontSize="large" />
@@ -235,11 +243,13 @@ const CustomDrawer = (props) => {
               <DeleteIcon />
             </IconButton>
           </ListItem>
+          <Divider />
           <ListItem>
             <ListItemIcon>
               <UndirectedEdgeIcon fontSize="large" />
             </ListItemIcon>
-            <ListItemText primary="Add Undirected Edge"></ListItemText>
+            <ListItemText primary="Add Edge"></ListItemText>
+
             <Menu
               selectedOption={edgeFrom}
               options={nodeIndices}
@@ -249,8 +259,8 @@ const CustomDrawer = (props) => {
               close={closeMenu}
               click={(e) => openEdgeFromMenu(e)}
             ></Menu>
-            &nbsp;
-            <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
+            &nbsp;&nbsp;
+            {/* <ListItemText primary="To"></ListItemText>&nbsp;&nbsp; */}
             <Menu
               selectedOption={edgeTo}
               options={nodeIndices}
@@ -260,9 +270,10 @@ const CustomDrawer = (props) => {
               close={closeMenu}
               click={(e) => openEdgeToMenu(e)}
             ></Menu>
+
             <IconButton
               onClick={() =>
-                addEdge(parseInt(edgeFrom), parseInt(edgeTo), false)
+                addEdge(parseInt(edgeFrom), parseInt(edgeTo), isDirectedEdge)
               }
               disabled={
                 edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To"
@@ -273,39 +284,16 @@ const CustomDrawer = (props) => {
           </ListItem>
           <ListItem>
             <ListItemIcon>
-              <DirectedEdgeIcon fontSize="large" />
+              {/* <UndirectedEdgeIcon fontSize="large" /> */}
             </ListItemIcon>
-            <ListItemText primary="Add Directed Edge From"></ListItemText>
-            <Menu
-              selectedOption={edgeFrom}
-              options={nodeIndices}
-              selectOption={selectEdgeFrom}
-              open={addEdgeFromMenuOpen}
-              anchor={addEdgeFromMenuAnchor}
-              close={closeMenu}
-              click={(e) => openEdgeFromMenu(e)}
-            ></Menu>
-            &nbsp;
-            <ListItemText primary="To"></ListItemText>&nbsp;&nbsp;
-            <Menu
-              selectedOption={edgeTo}
-              options={nodeIndices}
-              selectOption={selectEdgeTo}
-              open={addEdgeToMenuOpen}
-              anchor={addEdgeToMenuAnchor}
-              close={closeMenu}
-              click={(e) => openEdgeToMenu(e)}
-            ></Menu>
-            <IconButton
-              onClick={() =>
-                addEdge(parseInt(edgeFrom), parseInt(edgeTo), true)
-              }
-              disabled={
-                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To"
-              }
-            >
-              <AddNodeIcon />
-            </IconButton>
+            <ListItemText primary=""></ListItemText>
+            {/* <FormGroup row> */}
+            <FormControlLabel
+              control={<Checkbox checked={isDirectedEdge} onChange={checkDirectedEdge} name="checkedA" />}
+              label="Directed" size="small"
+            />
+            {/* </FormGroup> */}
+
           </ListItem>
         </List>
       </div>
@@ -318,7 +306,7 @@ const CustomDrawer = (props) => {
         alignItems="center"
         className={classes.visualizeButtonContainer}
       >
-        <Button
+        {/* <Button
           variant="contained"
           color="secondary"
           size="large"
@@ -326,33 +314,33 @@ const CustomDrawer = (props) => {
         >
           VISUALIZE
         </Button>
-        &nbsp;
-        <Grid
+        &nbsp; */}
+        {/* <Grid
           container
           direction="row"
           justify="space-around"
-          //alignItems="center"
-          //className={classes.visualizeButtonContainer}
+        //alignItems="center"
+        //className={classes.visualizeButtonContainer}
+        > */}
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => props.canvasRef.current.reset()}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => props.canvasRef.current.reset()}
-          >
-            RESET
-          </Button>
-          &nbsp;&nbsp;
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => clearCanvas()}
-          >
-            CLEAR
-          </Button>
-        </Grid>
+          RESET
+        </Button>
+        &nbsp;&nbsp;
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => clearCanvas()}
+        >
+          CLEAR
+        </Button>
       </Grid>
+      {/* </Grid> */}
       {/* </div> */}
       {/* <div className={classes.visualizeButton}> */}
       {/* </div> */}
