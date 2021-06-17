@@ -3,6 +3,7 @@ import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
 import DfsVisulization from "../../algorithms/DFS/DfsVisulization";
+import BfsVisualization from "../../algorithms/DFS/BfsVisualization";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -157,8 +158,17 @@ class Canvas extends React.Component {
       <div className="graph">
         {this.state.vertices}
         {this.state.edges}
-        {this.state.visualize ? (
+        {this.state.visualize && this.props.selectedAlgorithm === "DFS" ? (
           <DfsVisulization
+            startingVertex={0}
+            noOfVertices={this.state.noOfVertices}
+            vertexIDs={this.vertexIDs}
+            vertexRefs={this.vertexRefs}
+            edgeRefs={this.edgeRefs}
+            adjList={this.adjList}
+          />) : null}
+        {this.state.visualize && this.props.selectedAlgorithm === "BFS" ? (
+          <BfsVisualization
             startingVertex={0}
             noOfVertices={this.state.noOfVertices}
             vertexIDs={this.vertexIDs}
