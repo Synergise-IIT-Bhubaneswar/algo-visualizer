@@ -21,7 +21,9 @@ const Layout = () => {
         selectedAlgorithm={selectedAlgorithm}
         canvasRef={canvasRef}
       ></Header>
-      <Canvas ref={canvasRef} />
+      <Canvas
+        selectedAlgorithm={selectedAlgorithm}
+        ref={canvasRef} />
     </div>
   );
 };
