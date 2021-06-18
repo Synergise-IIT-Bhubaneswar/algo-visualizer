@@ -6,7 +6,6 @@ import TimelineIcon from "@material-ui/icons/Timeline";
 import AddNodeIcon from "@material-ui/icons/Add";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import UndirectedEdgeIcon from "@material-ui/icons/RemoveOutlined";
-import DirectedEdgeIcon from "@material-ui/icons/KeyboardBackspaceOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import BookIcon from "@material-ui/icons/Book";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,10 +18,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import FormGroup from "@material-ui/core/FormGroup"
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
+import Switch from "@material-ui/core/Switch";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -81,8 +81,9 @@ const CustomDrawer = (props) => {
   const [deleteNode, setDeleteNode] = useState("Index");
   const [deleteNodeMenuAnchor, setDeleteNodeMenuAnchor] = useState(null);
   const deleteNodeMenuOpen = Boolean(deleteNodeMenuAnchor);
-  const [isDirectedEdge, setIsDirectedEdge] = useState(false)
-  const [edgeWeight, setEdgeWeight] = useState("0");
+  const [isDirectedGraph, setIsDirectedGraph] = useState(false);
+  const [isWeightedGraph, setIsWeightedGraph] = useState(false);
+  const [edgeWeight, setEdgeWeight] = useState(null);
 
   //const nodeIndices = []
   useEffect(() => {
@@ -97,6 +98,7 @@ const CustomDrawer = (props) => {
       ? props.canvasRef.current.state.noOfVertices
       : props.canvasRef.current,
   ]);
+
   // [...Array(props.canvasRef.current.state.noOfVertices).keys()]
   // useEffect(() => {
   //     nodeIndices = [...Array(props.canvasRef.current.state.noOfVertices).keys()]
@@ -134,11 +136,10 @@ const CustomDrawer = (props) => {
     closeMenu();
   };
 
-  const addEdge = (from, to, isDirected, weight) => {
-    props.canvasRef.current.addEdge(from, to, isDirected, weight);
+  const addEdge = (from, to) => {
+    props.canvasRef.current.addEdge(from, to, isDirectedGraph, edgeWeight);
     setEdgeFrom("From");
     setEdgeTo("To");
-    setEdgeWeight('0')
   };
 
   const openDeleteNodeMenu = (e) => {
@@ -154,16 +155,23 @@ const CustomDrawer = (props) => {
     props.canvasRef.current.clearCanvas();
     setEdgeFrom("From");
     setEdgeTo("To");
-    setEdgeWeight('0')
+    setEdgeWeight("0");
   };
 
-  const checkDirectedEdge = () => {
-    setIsDirectedEdge(prev => !prev)
-  }
+  const checkDirectedGraph = () => {
+    setIsDirectedGraph((prev) => !prev);
+    // props.canvasRef.current.clearCanvas();
+  };
 
-  const weightChangeHandler = e => {
-    setEdgeWeight(e.target.value)
-  }
+  const checkWeightedGraph = () => {
+    if (isWeightedGraph == true) setEdgeWeight(null);
+    setIsWeightedGraph((prev) => !prev);
+    // props.canvasRef.current.clearCanvas();
+  };
+
+  const weightChangeHandler = (e) => {
+    setEdgeWeight(e.target.value);
+  };
   return (
     <Drawer
       className={classes.drawer}
@@ -204,7 +212,6 @@ const CustomDrawer = (props) => {
               click={(e) => openAlgorithmMenu(e)}
             ></Menu>
           </ListItem>
-
           <Divider />
           <ListItem>
             <ListItemIcon>
@@ -215,7 +222,37 @@ const CustomDrawer = (props) => {
               secondary="asfasfmc.ngkresjg jrgbkjrvgkjcrngjkergbkjergbjkdf vdn vjdsbgjkergbjdsv dsjgbkjsb vjnd djfg jh vdjnjdhg jdfv jdhrgvb d jdrhg jvh"
             ></ListItemText>
           </ListItem>
-
+          <Divider />
+          <ListItem>
+            <ListItemIcon>
+              <SettingsIcon fontSize="large" />
+            </ListItemIcon>
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isDirectedGraph}
+                    onChange={checkDirectedGraph}
+                    color="primary"
+                  />
+                }
+                label="Directed"
+                labelPlacement="start"
+              />
+              &nbsp;&nbsp;
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isWeightedGraph}
+                    onChange={checkWeightedGraph}
+                    color="primary"
+                  />
+                }
+                label="Weighted"
+                labelPlacement="start"
+              />
+            </FormGroup>
+          </ListItem>
           <Divider />
           <ListItem>
             <ListItemIcon>
@@ -257,7 +294,6 @@ const CustomDrawer = (props) => {
               <UndirectedEdgeIcon fontSize="large" />
             </ListItemIcon>
             <ListItemText primary="Add Edge"></ListItemText>
-
             <Menu
               selectedOption={edgeFrom}
               options={nodeIndices}
@@ -278,13 +314,13 @@ const CustomDrawer = (props) => {
               close={closeMenu}
               click={(e) => openEdgeToMenu(e)}
             ></Menu>
-
             <IconButton
-              onClick={() =>
-                addEdge(parseInt(edgeFrom), parseInt(edgeTo), isDirectedEdge, edgeWeight)
-              }
+              onClick={() => addEdge(parseInt(edgeFrom), parseInt(edgeTo))}
               disabled={
-                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To" || edgeWeight === ''
+                edgeFrom === edgeTo ||
+                edgeFrom === "From" ||
+                edgeTo === "To" ||
+                (isWeightedGraph && edgeWeight === null)
               }
             >
               <AddNodeIcon />
@@ -296,29 +332,40 @@ const CustomDrawer = (props) => {
             </ListItemIcon>
             <ListItemText primary=""></ListItemText>
             {/* <FormGroup row> */}
-            <FormControlLabel
-              control={<Checkbox checked={isDirectedEdge} onChange={checkDirectedEdge} name="checkedA" />}
-              label="Directed" size="small"
-            />
+            {/* <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isDirectedEdge}
+                  onChange={checkDirectedEdge}
+                  name="checkedA"
+                />
+              }
+              label="Directed"
+              size="small"
+            /> */}
             {/* </FormGroup> */}
-            <TextField
-              onChange={(e) => weightChangeHandler(e)}
-              label="Edge Weight"
-              defaultValue="0"
-              error={edgeWeight === ''}
-            >{edgeWeight}</TextField>
-
+            {isWeightedGraph ? (
+              <TextField
+                type="number"
+                onChange={(e) => weightChangeHandler(e)}
+                label="Edge Weight"
+                error={edgeWeight === ""}
+              >
+                {edgeWeight}
+              </TextField>
+            ) : null}
           </ListItem>
         </List>
       </div>
       <Divider />
       {/* <div className={classes.visualizeButtonContainer}> */}
+      &nbsp; &nbsp;
       <Grid
         container
-        direction="column"
-        justify="space-between"
+        direction="row"
+        justify="space-evenly"
         alignItems="center"
-        className={classes.visualizeButtonContainer}
+        //  className={classes.visualizeButtonContainer}
       >
         {/* <Button
           variant="contained"
@@ -358,7 +405,6 @@ const CustomDrawer = (props) => {
       {/* </div> */}
       {/* <div className={classes.visualizeButton}> */}
       {/* </div> */}
-
       {/* <Grid container spacing="1">
                 <Grid justify="center">
                     Select Algorithm - <Menu open={algorithmMenuOpen} options={AlgorithmOptions}></Menu>
