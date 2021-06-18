@@ -22,6 +22,7 @@ import Button from "@material-ui/core/Button";
 import FormGroup from "@material-ui/core/FormGroup"
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import TextField from "@material-ui/core/TextField";
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -81,6 +82,7 @@ const CustomDrawer = (props) => {
   const [deleteNodeMenuAnchor, setDeleteNodeMenuAnchor] = useState(null);
   const deleteNodeMenuOpen = Boolean(deleteNodeMenuAnchor);
   const [isDirectedEdge, setIsDirectedEdge] = useState(false)
+  const [edgeWeight, setEdgeWeight] = useState("0");
 
   //const nodeIndices = []
   useEffect(() => {
@@ -132,10 +134,11 @@ const CustomDrawer = (props) => {
     closeMenu();
   };
 
-  const addEdge = (from, to, isDirected) => {
-    props.canvasRef.current.addEdge(from, to, isDirected);
+  const addEdge = (from, to, isDirected, weight) => {
+    props.canvasRef.current.addEdge(from, to, isDirected, weight);
     setEdgeFrom("From");
     setEdgeTo("To");
+    setEdgeWeight('0')
   };
 
   const openDeleteNodeMenu = (e) => {
@@ -151,10 +154,15 @@ const CustomDrawer = (props) => {
     props.canvasRef.current.clearCanvas();
     setEdgeFrom("From");
     setEdgeTo("To");
+    setEdgeWeight('0')
   };
 
   const checkDirectedEdge = () => {
     setIsDirectedEdge(prev => !prev)
+  }
+
+  const weightChangeHandler = e => {
+    setEdgeWeight(e.target.value)
   }
   return (
     <Drawer
@@ -273,10 +281,10 @@ const CustomDrawer = (props) => {
 
             <IconButton
               onClick={() =>
-                addEdge(parseInt(edgeFrom), parseInt(edgeTo), isDirectedEdge)
+                addEdge(parseInt(edgeFrom), parseInt(edgeTo), isDirectedEdge, edgeWeight)
               }
               disabled={
-                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To"
+                edgeFrom === edgeTo || edgeFrom === "From" || edgeTo === "To" || edgeWeight === ''
               }
             >
               <AddNodeIcon />
@@ -293,6 +301,12 @@ const CustomDrawer = (props) => {
               label="Directed" size="small"
             />
             {/* </FormGroup> */}
+            <TextField
+              onChange={(e) => weightChangeHandler(e)}
+              label="Edge Weight"
+              defaultValue="0"
+              error={edgeWeight === ''}
+            >{edgeWeight}</TextField>
 
           </ListItem>
         </List>

@@ -55,20 +55,21 @@ class Edge extends React.Component {
               markerHeight={4}
               refX={3}
               refY={2}
+              style={{ overflow: "visible" }}
             >
-              <polygon points="0 0, 6 2, 0 4" />
+              <text x="3" y="0" fontSize="6">{this.props.weight}</text>
+              {this.props.isDirected && (<polygon points="0 0, 6 2, 0 4" />)}
             </marker>
           </defs>
           <polyline
-            points={`${this.state.X1},${this.state.Y1},${
-              (this.state.X1 + this.state.X2) / 2
-            },${(this.state.Y1 + this.state.Y2) / 2},${this.state.X2},${
-              this.state.Y2
-            }`}
+            points={`${this.state.X1},${this.state.Y1},${(this.state.X1 + this.state.X2) / 2
+              },${(this.state.Y1 + this.state.Y2) / 2},${this.state.X2},${this.state.Y2
+              }`}
             stroke={this.state.styles.stroke}
             strokeWidth="4px"
             markerMid={
-              this.props.isDirected ? `url(#${this.props.edgeKey})` : "none"
+              // this.props.isDirected ? `url(#${this.props.edgeKey})` : "none"
+              `url(#${this.props.edgeKey})`
             }
           />
         </svg>

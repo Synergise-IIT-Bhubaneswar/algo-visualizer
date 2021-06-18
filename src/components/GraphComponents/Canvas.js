@@ -52,7 +52,7 @@ class Canvas extends React.Component {
     });
   };
 
-  addEdge = (n1, n2, isDirected) => {
+  addEdge = (n1, n2, isDirected, weight) => {
     const newEdgeRef = React.createRef();
     const uniqueID = uuidv4();
     var newEdges = this.state.edges.map((edge) => edge);
@@ -62,6 +62,7 @@ class Canvas extends React.Component {
 
     newEdges.push(
       <Edge
+        weight={weight}
         ref={newEdgeRef}
         key={uniqueID}
         n1Ref={this.vertexRefs.get(n1ID)}
@@ -154,7 +155,7 @@ class Canvas extends React.Component {
 
   reset = () => {
     this.vertexRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
-    this.edgeRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
+    this.edgeRefs.forEach((ref) => ref.current.changeBackgroundColor("black"));
     this.props.visualizationEnd();
   };
 
