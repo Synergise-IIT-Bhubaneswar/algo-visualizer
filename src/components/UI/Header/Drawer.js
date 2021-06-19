@@ -84,6 +84,8 @@ const CustomDrawer = (props) => {
   const [isDirectedGraph, setIsDirectedGraph] = useState(false);
   const [isWeightedGraph, setIsWeightedGraph] = useState(false);
   const [edgeWeight, setEdgeWeight] = useState(null);
+  const [startNodeMenuAnchor, setStartNodeMenuAnchor] = useState(null);
+  const startNodeMenuOpen = Boolean(startNodeMenuAnchor);
 
   //const nodeIndices = []
   useEffect(() => {
@@ -109,6 +111,7 @@ const CustomDrawer = (props) => {
     setaddEdgeFromMenuAnchor(null);
     setaddEdgeToMenuAnchor(null);
     setDeleteNodeMenuAnchor(null);
+    setStartNodeMenuAnchor(null);
   };
   const openAlgorithmMenu = (e) => {
     setAlgorithmMenuAnchor(e.currentTarget);
@@ -121,6 +124,15 @@ const CustomDrawer = (props) => {
   const openEdgeToMenu = (e) => {
     setaddEdgeToMenuAnchor(e.currentTarget);
   };
+
+  const openStartNodeMenu = (e) => {
+    setStartNodeMenuAnchor(e.currentTarget);
+  };
+
+  const selectStartNode = (node) => {
+    props.selectStartNode(node);
+    closeMenu();
+  }
 
   const selectAlgorithm = (algorithm) => {
     props.selectAlgorithm(algorithm);
@@ -156,6 +168,7 @@ const CustomDrawer = (props) => {
     setEdgeFrom("From");
     setEdgeTo("To");
     setEdgeWeight("0");
+    props.selectStartNode("Start Node")
   };
 
   const checkDirectedGraph = () => {
@@ -210,6 +223,21 @@ const CustomDrawer = (props) => {
               close={closeMenu}
               options={props.AlgorithmOptions}
               click={(e) => openAlgorithmMenu(e)}
+            ></Menu>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              {/* <TimelineIcon fontSize="large" /> */}
+            </ListItemIcon>
+            <ListItemText primary="Select Start Node" />
+            <Menu
+              selectOption={selectStartNode}
+              selectedOption={props.startNode}
+              open={startNodeMenuOpen}
+              anchor={startNodeMenuAnchor}
+              close={closeMenu}
+              options={nodeIndices}
+              click={(e) => openStartNodeMenu(e)}
             ></Menu>
           </ListItem>
           <Divider />
@@ -365,7 +393,7 @@ const CustomDrawer = (props) => {
         direction="row"
         justify="space-evenly"
         alignItems="center"
-        //  className={classes.visualizeButtonContainer}
+      //  className={classes.visualizeButtonContainer}
       >
         {/* <Button
           variant="contained"

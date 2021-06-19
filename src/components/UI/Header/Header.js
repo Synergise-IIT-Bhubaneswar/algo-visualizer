@@ -128,6 +128,8 @@ const Header = (props) => {
         </Toolbar>
       </AppBar>
       <CustomDrawer
+        startNode={props.startNode}
+        selectStartNode={props.selectStartNode}
         selectAlgorithm={props.selectAlgorithm}
         AlgorithmOptions={props.AlgorithmOptions}
         selectedAlgorithm={props.selectedAlgorithm}

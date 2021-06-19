@@ -9,6 +9,10 @@ const Layout = () => {
   );
 
   const [isVisualizing, setIsVisualizing] = useState(false)
+  const [startNode, setStartNode] = useState("Start Node")
+  const selectStartNode = (node) => {
+    setStartNode(node);
+  }
 
   const startVisualizing = () => {
     setIsVisualizing(true)
@@ -26,6 +30,8 @@ const Layout = () => {
   return (
     <div>
       <Header
+        startNode={startNode}
+        selectStartNode={selectStartNode}
         selectAlgorithm={selectAlgorithm}
         AlgorithmOptions={AlgorithmOptions}
         selectedAlgorithm={selectedAlgorithm}
@@ -34,6 +40,7 @@ const Layout = () => {
         isVisualizing={isVisualizing}
       ></Header>
       <Canvas
+        startNode={startNode}
         visualizationStart={startVisualizing}
         visualizationEnd={endVisualizing}
         isVisualizing={isVisualizing}
