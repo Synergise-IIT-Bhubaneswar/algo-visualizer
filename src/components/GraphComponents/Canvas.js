@@ -3,7 +3,7 @@ import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
 import DfsVisulization from "../../algorithms/DFS/DfsVisulization";
-import BfsVisualization from "../../algorithms/DFS/BfsVisualization";
+import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -12,6 +12,8 @@ class Canvas extends React.Component {
     this.edgeRefs = new Map();
     this.vertexRefs = new Map();
     this.adjList = new Map();
+    this.directedTo = new Map();
+    // this helps in moving directed edge when n2 of directed edge is dragged on screen
     this.state = {
       visualize: false,
       noOfVertices: 0,
@@ -21,10 +23,15 @@ class Canvas extends React.Component {
   }
 
   moveEdge = (vertexID, x, y) => {
-    var i;
-    for (i = 0; i < this.adjList.get(vertexID).length; i++) {
+    for (var i = 0; i < this.adjList.get(vertexID).length; i++) {
       const id = this.adjList.get(vertexID)[i];
       this.edgeRefs.get(id).current.changePosition(vertexID, x, y);
+    }
+    if (this.directedTo.has(vertexID)) {
+      for (var i = 0; i < this.directedTo.get(vertexID).length; i++) {
+        const id = this.directedTo.get(vertexID)[i];
+        this.edgeRefs.get(id).current.changePosition(vertexID, x, y);
+      }
     }
   };
 
@@ -52,13 +59,48 @@ class Canvas extends React.Component {
     });
   };
 
+  isEdgePresent = (n1ID, n2ID, isDirected) => {
+    for (var i = 0; i < this.adjList.get(n1ID).length; i++) {
+      const edgeRef = this.edgeRefs.get(this.adjList.get(n1ID)[i]);
+      if (edgeRef.current.props.isDirected && edgeRef.current.n2ID === n2ID) {
+        return true;
+      }
+      if (
+        !edgeRef.current.props.isDirected &&
+        (edgeRef.current.n1ID === n2ID || edgeRef.current.n2ID === n2ID)
+      ) {
+        return true;
+      }
+    }
+
+    // Directed edge from n2 to n1 exists and user trying to
+    // add Un-Directed edge from n1 to n2
+    if (!isDirected && this.directedTo.has(n1ID)) {
+      for (var i = 0; i < this.directedTo.get(n1ID).length; i++) {
+        const edgeRef = this.edgeRefs.get(this.directedTo.get(n1ID)[i]);
+        if (edgeRef.current.n1ID == n2ID) return true;
+      }
+    }
+    return false;
+  };
+  // CASE 1 - Un-Directed edge from n1 to n2
+  // Can NOT add any other edge between n1 and n2
+
+  // CASE 2 - Directed edge from n1 to n2
+  // Can only add Directed edge from n2 to n1
+  // Can NOT add any Un- directed edge between n1 and n2
+
   addEdge = (n1, n2, isDirected, weight) => {
+    const n1ID = this.vertexIDs[n1];
+    const n2ID = this.vertexIDs[n2];
+    if (this.isEdgePresent(n1ID, n2ID, isDirected)) {
+      console.log("edge already +nt");
+      return;
+    }
+
     const newEdgeRef = React.createRef();
     const uniqueID = uuidv4();
     var newEdges = this.state.edges.map((edge) => edge);
-
-    const n1ID = this.vertexIDs[n1];
-    const n2ID = this.vertexIDs[n2];
 
     newEdges.push(
       <Edge
@@ -75,9 +117,12 @@ class Canvas extends React.Component {
     this.edgeRefs.set(uniqueID, newEdgeRef);
 
     this.adjList.get(n1ID).push(uniqueID);
-    this.adjList.get(n2ID).push(uniqueID);
-    // in algorithms check whether edge is directed or undirected
-    // this adjList is not differentiating between directed and undirected
+    if (!isDirected) this.adjList.get(n2ID).push(uniqueID);
+
+    if (isDirected) {
+      if (this.directedTo.has(n2ID)) this.directedTo.get(n2ID).push(uniqueID);
+      else this.directedTo.set(n2ID, [uniqueID]);
+    }
 
     this.setState({
       edges: newEdges,
@@ -95,13 +140,14 @@ class Canvas extends React.Component {
       vertices: [],
       edges: [],
     });
-    this.props.visualizationEnd()
+    this.props.visualizationEnd();
   };
 
   // check for optimisation
   deleteVertex = (vertexIndex) => {
     const uniqueID = this.vertexIDs[vertexIndex];
     this.vertexRefs.delete(uniqueID);
+    this.directedTo.delete(uniqueID);
 
     const incidentEdges = this.adjList.get(uniqueID);
     var i;
@@ -173,7 +219,8 @@ class Canvas extends React.Component {
             edgeRefs={this.edgeRefs}
             adjList={this.adjList}
             endVisualizing={this.endVisualizing}
-          />) : null}
+          />
+        ) : null}
         {this.props.isVisualizing && this.props.selectedAlgorithm === "BFS" ? (
           <BfsVisualization
             startingVertex={parseInt(this.props.startNode)}
