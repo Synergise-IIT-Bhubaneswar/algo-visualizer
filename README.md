@@ -1,6 +1,7 @@
 # Algo-Visualizer
 
 - An interactive tool to learn graph algorithms easily
+- Built with React and MaterialUI
 
 ## Current Features
 
