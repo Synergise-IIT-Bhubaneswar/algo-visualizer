@@ -212,7 +212,7 @@ class Canvas extends React.Component {
         {this.state.edges}
         {this.props.isVisualizing && this.props.selectedAlgorithm === "DFS" ? (
           <DfsVisulization
-            startingVertex={0}
+            startingVertex={parseInt(this.props.startNode)}
             noOfVertices={this.state.noOfVertices}
             vertexIDs={this.vertexIDs}
             vertexRefs={this.vertexRefs}
@@ -223,7 +223,7 @@ class Canvas extends React.Component {
         ) : null}
         {this.props.isVisualizing && this.props.selectedAlgorithm === "BFS" ? (
           <BfsVisualization
-            startingVertex={0}
+            startingVertex={parseInt(this.props.startNode)}
             noOfVertices={this.state.noOfVertices}
             vertexIDs={this.vertexIDs}
             vertexRefs={this.vertexRefs}

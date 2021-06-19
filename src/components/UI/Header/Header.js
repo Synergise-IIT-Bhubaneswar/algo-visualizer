@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -70,6 +70,7 @@ const Header = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const [nodeIndices, setNodeIndices] = useState([])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -83,6 +84,18 @@ const Header = (props) => {
     props.startVisualizing()
     props.canvasRef.current.startVisualizing()
   }
+  useEffect(() => {
+    const newNodeIndices = [];
+    for (let i = 0; i < props.canvasRef.current.state.noOfVertices; i++) {
+      newNodeIndices.push(i);
+    }
+    console.log("useEff");
+    setNodeIndices(newNodeIndices);
+  }, [
+    props.canvasRef.current
+      ? props.canvasRef.current.state.noOfVertices
+      : props.canvasRef.current,
+  ]);
 
   return (
     <div className={classes.root}>
@@ -115,7 +128,7 @@ const Header = (props) => {
               color="secondary"
               size="large"
               onClick={() => startVisualizing()}
-              disabled={props.isVisualizing}
+              disabled={props.isVisualizing || (props.startNode === "Start Node" || nodeIndices.length === 0)}
             >
               VISUALIZE&nbsp;
               {props.isVisualizing && (
@@ -128,6 +141,8 @@ const Header = (props) => {
         </Toolbar>
       </AppBar>
       <CustomDrawer
+        startNode={props.startNode}
+        selectStartNode={props.selectStartNode}
         selectAlgorithm={props.selectAlgorithm}
         AlgorithmOptions={props.AlgorithmOptions}
         selectedAlgorithm={props.selectedAlgorithm}
