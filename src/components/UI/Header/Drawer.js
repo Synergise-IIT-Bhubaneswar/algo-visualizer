@@ -54,12 +54,12 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   },
-  visualizeButtonContainer: {
+  buttonContainer: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: theme.spacing(2, 1, 2),
+    padding: theme.spacing(0, 1, 1),
   },
   visualizeButton: {
     alignItems: "center",
@@ -393,7 +393,7 @@ const CustomDrawer = (props) => {
         direction="row"
         justify="space-evenly"
         alignItems="center"
-      //  className={classes.visualizeButtonContainer}
+        className={classes.buttonContainer}
       >
         {/* <Button
           variant="contained"
