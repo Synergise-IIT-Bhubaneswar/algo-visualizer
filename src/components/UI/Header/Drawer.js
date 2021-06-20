@@ -71,19 +71,31 @@ const CustomDrawer = (props) => {
   const theme = useTheme();
   const [algorithmMenuAnchor, setAlgorithmMenuAnchor] = useState(null);
   const algorithmMenuOpen = Boolean(algorithmMenuAnchor);
-  const [addEdgeFromMenuAnchor, setaddEdgeFromMenuAnchor] = useState(null);
-  const [edgeFrom, setEdgeFrom] = useState("From");
-  const [edgeTo, setEdgeTo] = useState("To");
+
+  const [addEdgeFromMenuAnchor, setAddEdgeFromMenuAnchor] = useState(null);
+  const [addEdgeFrom, setAddEdgeFrom] = useState("From");
+  const [addEdgeTo, setAddEdgeTo] = useState("To");
   const addEdgeFromMenuOpen = Boolean(addEdgeFromMenuAnchor);
-  const [addEdgeToMenuAnchor, setaddEdgeToMenuAnchor] = useState(null);
+  const [addEdgeToMenuAnchor, setAddEdgeToMenuAnchor] = useState(null);
   const addEdgeToMenuOpen = Boolean(addEdgeToMenuAnchor);
+
   const [nodeIndices, setNodeIndices] = useState([]);
   const [deleteNode, setDeleteNode] = useState("Index");
   const [deleteNodeMenuAnchor, setDeleteNodeMenuAnchor] = useState(null);
   const deleteNodeMenuOpen = Boolean(deleteNodeMenuAnchor);
+
+  const [deleteEdgeFromMenuAnchor, setDeleteEdgeFromMenuAnchor] =
+    useState(null);
+  const [deleteEdgeFrom, setDeleteEdgeFrom] = useState("From");
+  const [deleteEdgeTo, setDeleteEdgeTo] = useState("To");
+  const deleteEdgeFromMenuOpen = Boolean(deleteEdgeFromMenuAnchor);
+  const [deleteEdgeToMenuAnchor, setDeleteEdgeToMenuAnchor] = useState(null);
+  const deleteEdgeToMenuOpen = Boolean(deleteEdgeToMenuAnchor);
+
   const [isDirectedGraph, setIsDirectedGraph] = useState(false);
   const [isWeightedGraph, setIsWeightedGraph] = useState(false);
   const [edgeWeight, setEdgeWeight] = useState(null);
+
   const [startNodeMenuAnchor, setStartNodeMenuAnchor] = useState(null);
   const startNodeMenuOpen = Boolean(startNodeMenuAnchor);
 
@@ -108,21 +120,45 @@ const CustomDrawer = (props) => {
   //console.log(props.canvasRef, nodeIndices);
   const closeMenu = () => {
     setAlgorithmMenuAnchor(null);
-    setaddEdgeFromMenuAnchor(null);
-    setaddEdgeToMenuAnchor(null);
+    setAddEdgeFromMenuAnchor(null);
+    setAddEdgeToMenuAnchor(null);
     setDeleteNodeMenuAnchor(null);
+    setDeleteEdgeFromMenuAnchor(null);
+    setDeleteEdgeToMenuAnchor(null);
     setStartNodeMenuAnchor(null);
   };
+
   const openAlgorithmMenu = (e) => {
     setAlgorithmMenuAnchor(e.currentTarget);
   };
 
-  const openEdgeFromMenu = (e) => {
-    setaddEdgeFromMenuAnchor(e.currentTarget);
+  const selectAlgorithm = (algorithm) => {
+    props.selectAlgorithm(algorithm);
+    closeMenu();
   };
 
-  const openEdgeToMenu = (e) => {
-    setaddEdgeToMenuAnchor(e.currentTarget);
+  const openAddEdgeFromMenu = (e) => {
+    setAddEdgeFromMenuAnchor(e.currentTarget);
+  };
+
+  const openAddEdgeToMenu = (e) => {
+    setAddEdgeToMenuAnchor(e.currentTarget);
+  };
+
+  const selectAddEdgeFrom = (from) => {
+    setAddEdgeFrom(from);
+    closeMenu();
+  };
+
+  const selectAddEdgeTo = (to) => {
+    setAddEdgeTo(to);
+    closeMenu();
+  };
+
+  const addEdge = (from, to) => {
+    props.canvasRef.current.addEdge(from, to, isDirectedGraph, edgeWeight);
+    setAddEdgeFrom("From");
+    setAddEdgeTo("To");
   };
 
   const openStartNodeMenu = (e) => {
@@ -132,26 +168,6 @@ const CustomDrawer = (props) => {
   const selectStartNode = (node) => {
     props.selectStartNode(node);
     closeMenu();
-  }
-
-  const selectAlgorithm = (algorithm) => {
-    props.selectAlgorithm(algorithm);
-    closeMenu();
-  };
-
-  const selectEdgeFrom = (from) => {
-    setEdgeFrom(from);
-    closeMenu();
-  };
-  const selectEdgeTo = (to) => {
-    setEdgeTo(to);
-    closeMenu();
-  };
-
-  const addEdge = (from, to) => {
-    props.canvasRef.current.addEdge(from, to, isDirectedGraph, edgeWeight);
-    setEdgeFrom("From");
-    setEdgeTo("To");
   };
 
   const openDeleteNodeMenu = (e) => {
@@ -163,17 +179,32 @@ const CustomDrawer = (props) => {
     closeMenu();
   };
 
-  const clearCanvas = () => {
-    props.canvasRef.current.clearCanvas();
-    setEdgeFrom("From");
-    setEdgeTo("To");
-    setEdgeWeight("0");
-    props.selectStartNode("Start Node")
+  const openDeleteEdgeFromMenu = (e) => {
+    setDeleteEdgeFromMenuAnchor(e.currentTarget);
+  };
+
+  const openDeleteEdgeToMenu = (e) => {
+    setDeleteEdgeToMenuAnchor(e.currentTarget);
+  };
+
+  const selectDeleteEdgeFrom = (from) => {
+    setDeleteEdgeFrom(from);
+    closeMenu();
+  };
+
+  const selectDeleteEdgeTo = (to) => {
+    setDeleteEdgeTo(to);
+    closeMenu();
+  };
+
+  const deleteEdge = (from, to) => {
+    props.canvasRef.current.deleteEdge(from, to);
+    setDeleteEdgeFrom("From");
+    setDeleteEdgeTo("To");
   };
 
   const checkDirectedGraph = () => {
     setIsDirectedGraph((prev) => !prev);
-    // props.canvasRef.current.clearCanvas();
   };
 
   const checkWeightedGraph = () => {
@@ -185,6 +216,17 @@ const CustomDrawer = (props) => {
   const weightChangeHandler = (e) => {
     setEdgeWeight(e.target.value);
   };
+
+  const clearCanvas = () => {
+    props.canvasRef.current.clearCanvas();
+    setAddEdgeFrom("From");
+    setAddEdgeTo("To");
+    setDeleteEdgeFrom("From");
+    setDeleteEdgeTo("To");
+    setEdgeWeight("0");
+    props.selectStartNode("Start Node");
+  };
+
   return (
     <Drawer
       className={classes.drawer}
@@ -287,33 +329,11 @@ const CustomDrawer = (props) => {
               <AddNodeIcon fontSize="large" />
             </ListItemIcon>
             <ListItemText primary="Add a New Node"></ListItemText>
-            <IconButton onClick={() => props.canvasRef.current.addVertex()}>
-              <AddNodeIcon />
-            </IconButton>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemIcon>
-              <DeleteIcon fontSize="large" />
-            </ListItemIcon>
-            <ListItemText primary="Delete Node"></ListItemText>
-            <Menu
-              selectedOption={deleteNode}
-              options={nodeIndices}
-              selectOption={selectDeleteNode}
-              open={deleteNodeMenuOpen}
-              anchor={deleteNodeMenuAnchor}
-              close={closeMenu}
-              click={(e) => openDeleteNodeMenu(e)}
-            ></Menu>
             <IconButton
-              onClick={() => {
-                props.canvasRef.current.deleteVertex(parseInt(deleteNode));
-                setDeleteNode("Index");
-              }}
-              disabled={deleteNode === "Index"}
+              color="primary"
+              onClick={() => props.canvasRef.current.addVertex()}
             >
-              <DeleteIcon />
+              <AddNodeIcon />
             </IconButton>
           </ListItem>
           <Divider />
@@ -323,31 +343,34 @@ const CustomDrawer = (props) => {
             </ListItemIcon>
             <ListItemText primary="Add Edge"></ListItemText>
             <Menu
-              selectedOption={edgeFrom}
+              selectedOption={addEdgeFrom}
               options={nodeIndices}
-              selectOption={selectEdgeFrom}
+              selectOption={selectAddEdgeFrom}
               open={addEdgeFromMenuOpen}
               anchor={addEdgeFromMenuAnchor}
               close={closeMenu}
-              click={(e) => openEdgeFromMenu(e)}
+              click={(e) => openAddEdgeFromMenu(e)}
             ></Menu>
             &nbsp;&nbsp;
             {/* <ListItemText primary="To"></ListItemText>&nbsp;&nbsp; */}
             <Menu
-              selectedOption={edgeTo}
+              selectedOption={addEdgeTo}
               options={nodeIndices}
-              selectOption={selectEdgeTo}
+              selectOption={selectAddEdgeTo}
               open={addEdgeToMenuOpen}
               anchor={addEdgeToMenuAnchor}
               close={closeMenu}
-              click={(e) => openEdgeToMenu(e)}
+              click={(e) => openAddEdgeToMenu(e)}
             ></Menu>
             <IconButton
-              onClick={() => addEdge(parseInt(edgeFrom), parseInt(edgeTo))}
+              color="primary"
+              onClick={() =>
+                addEdge(parseInt(addEdgeFrom), parseInt(addEdgeTo))
+              }
               disabled={
-                edgeFrom === edgeTo ||
-                edgeFrom === "From" ||
-                edgeTo === "To" ||
+                addEdgeFrom === addEdgeTo ||
+                addEdgeFrom === "From" ||
+                addEdgeTo === "To" ||
                 (isWeightedGraph && edgeWeight === null)
               }
             >
@@ -355,23 +378,7 @@ const CustomDrawer = (props) => {
             </IconButton>
           </ListItem>
           <ListItem>
-            <ListItemIcon>
-              {/* <UndirectedEdgeIcon fontSize="large" /> */}
-            </ListItemIcon>
             <ListItemText primary=""></ListItemText>
-            {/* <FormGroup row> */}
-            {/* <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isDirectedEdge}
-                  onChange={checkDirectedEdge}
-                  name="checkedA"
-                />
-              }
-              label="Directed"
-              size="small"
-            /> */}
-            {/* </FormGroup> */}
             {isWeightedGraph ? (
               <TextField
                 type="number"
@@ -382,6 +389,71 @@ const CustomDrawer = (props) => {
                 {edgeWeight}
               </TextField>
             ) : null}
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemIcon>
+              <DeleteIcon fontSize="large" />
+            </ListItemIcon>
+            <Grid direction="column">
+              <ListItem style={{ paddingLeft: "0", paddingRight: "0" }}>
+                <ListItemText primary="Delete Node"></ListItemText>
+                <Menu
+                  selectedOption={deleteNode}
+                  options={nodeIndices}
+                  selectOption={selectDeleteNode}
+                  open={deleteNodeMenuOpen}
+                  anchor={deleteNodeMenuAnchor}
+                  close={closeMenu}
+                  click={(e) => openDeleteNodeMenu(e)}
+                ></Menu>
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    props.canvasRef.current.deleteVertex(parseInt(deleteNode));
+                    setDeleteNode("Index");
+                  }}
+                  disabled={deleteNode === "Index"}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+              <ListItem style={{ paddingLeft: "0", paddingRight: "0" }}>
+                <ListItemText primary="Delete Edge"></ListItemText>
+                <Menu
+                  selectedOption={deleteEdgeFrom}
+                  options={nodeIndices}
+                  selectOption={selectDeleteEdgeFrom}
+                  open={deleteEdgeFromMenuOpen}
+                  anchor={deleteEdgeFromMenuAnchor}
+                  close={closeMenu}
+                  click={(e) => openDeleteEdgeFromMenu(e)}
+                ></Menu>
+                &nbsp;&nbsp;
+                <Menu
+                  selectedOption={deleteEdgeTo}
+                  options={nodeIndices}
+                  selectOption={selectDeleteEdgeTo}
+                  open={deleteEdgeToMenuOpen}
+                  anchor={deleteEdgeToMenuAnchor}
+                  close={closeMenu}
+                  click={(e) => openDeleteEdgeToMenu(e)}
+                ></Menu>
+                <IconButton
+                  color="primary"
+                  onClick={() =>
+                    deleteEdge(parseInt(addEdgeFrom), parseInt(addEdgeTo))
+                  }
+                  disabled={
+                    deleteEdgeFrom === deleteEdgeTo ||
+                    deleteEdgeFrom === "From" ||
+                    deleteEdgeTo === "To"
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            </Grid>
           </ListItem>
         </List>
       </div>
