@@ -27,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     height: "60px",
+    backgroundImage:
+      "url('https://image.freepik.com/free-vector/network-abstract-connections-with-dots-lines-blue-background_110633-574.jpg')",
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -70,7 +72,7 @@ const Header = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [nodeIndices, setNodeIndices] = useState([])
+  const [nodeIndices, setNodeIndices] = useState([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -81,9 +83,9 @@ const Header = (props) => {
   };
 
   const startVisualizing = () => {
-    props.startVisualizing()
-    props.canvasRef.current.startVisualizing()
-  }
+    props.startVisualizing();
+    props.canvasRef.current.startVisualizing();
+  };
   useEffect(() => {
     const newNodeIndices = [];
     for (let i = 0; i < props.canvasRef.current.state.noOfVertices; i++) {
@@ -118,24 +120,26 @@ const Header = (props) => {
             <ChevronRightIcon />
             <ChevronRightIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={clsx("title", classes.title)}>
             Algo-Visualizer
           </Typography>
-          <Grid
-            className={classes.visualizeButtonContainer}>
+          <Grid className={classes.visualizeButtonContainer}>
             <Button
               variant="contained"
               color="secondary"
               size="large"
               onClick={() => startVisualizing()}
-              disabled={props.isVisualizing || (props.startNode === "Start Node" || nodeIndices.length === 0)}
+              disabled={
+                props.isVisualizing ||
+                props.startNode === "Start Node" ||
+                nodeIndices.length === 0
+              }
             >
               VISUALIZE&nbsp;
               {props.isVisualizing && (
                 <CircularProgress size={20} color="inherit" />
               )}
             </Button>
-
           </Grid>
           <Button color="inherit">Github</Button>
         </Toolbar>
