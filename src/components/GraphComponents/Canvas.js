@@ -13,7 +13,7 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
-    // this helps in moving directed edge when n2 of directed edge is dragged on screen
+    // this stores the directed edge incident TO a vertex
     this.state = {
       visualize: false,
       noOfVertices: 0,
@@ -63,13 +63,13 @@ class Canvas extends React.Component {
     for (var i = 0; i < this.adjList.get(n1ID).length; i++) {
       const edgeRef = this.edgeRefs.get(this.adjList.get(n1ID)[i]);
       if (edgeRef.current.props.isDirected && edgeRef.current.n2ID === n2ID) {
-        return true;
+        return this.adjList.get(n1ID)[i];
       }
       if (
         !edgeRef.current.props.isDirected &&
         (edgeRef.current.n1ID === n2ID || edgeRef.current.n2ID === n2ID)
       ) {
-        return true;
+        return this.adjList.get(n1ID)[i];
       }
     }
 
@@ -78,22 +78,22 @@ class Canvas extends React.Component {
     if (!isDirected && this.directedTo.has(n1ID)) {
       for (var i = 0; i < this.directedTo.get(n1ID).length; i++) {
         const edgeRef = this.edgeRefs.get(this.directedTo.get(n1ID)[i]);
-        if (edgeRef.current.n1ID == n2ID) return true;
+        if (edgeRef.current.n1ID == n2ID) return this.directedTo.get(n1ID)[i];
       }
     }
     return false;
   };
-  // CASE 1 - Un-Directed edge from n1 to n2
+  // CASE 1 - Un-Directed edge from n1 to n2 exists
   // Can NOT add any other edge between n1 and n2
 
-  // CASE 2 - Directed edge from n1 to n2
+  // CASE 2 - Directed edge from n1 to n2 exists
   // Can only add Directed edge from n2 to n1
   // Can NOT add any Un- directed edge between n1 and n2
 
   addEdge = (n1, n2, isDirected, weight) => {
     const n1ID = this.vertexIDs[n1];
     const n2ID = this.vertexIDs[n2];
-    if (this.isEdgePresent(n1ID, n2ID, isDirected)) {
+    if (this.isEdgePresent(n1ID, n2ID, isDirected) !== false) {
       console.log("edge already +nt");
       return;
     }
@@ -134,6 +134,7 @@ class Canvas extends React.Component {
     this.edgeRefs = new Map();
     this.vertexRefs = new Map();
     this.adjList = new Map();
+    this.directedTo = new Map();
     this.setState({
       visualize: false,
       noOfVertices: 0,
@@ -147,14 +148,14 @@ class Canvas extends React.Component {
   deleteVertex = (vertexIndex) => {
     const uniqueID = this.vertexIDs[vertexIndex];
     this.vertexRefs.delete(uniqueID);
-    this.directedTo.delete(uniqueID);
 
     const incidentEdges = this.adjList.get(uniqueID);
-    var i;
-    for (i = 0; i < incidentEdges.length; i++) {
+
+    for (var i = 0; i < incidentEdges.length; i++) {
       const edgeID = incidentEdges[i];
       const edgeRef = this.edgeRefs.get(edgeID);
-      this.edgeRefs.delete(incidentEdges[i]);
+      this.edgeRefs.delete(edgeID);
+      if (edgeRef.current.props.isDirected) continue;
       const connectedVertexID = edgeRef.current.getOtherVertexID(uniqueID);
 
       const updatedNeighbour = this.adjList
@@ -162,6 +163,23 @@ class Canvas extends React.Component {
         .filter((id) => id !== edgeID);
 
       this.adjList.set(connectedVertexID, updatedNeighbour);
+    }
+
+    if (this.directedTo.has(uniqueID)) {
+      const incomingDirectedEdges = this.directedTo.get(uniqueID);
+      for (var i = 0; i < incomingDirectedEdges.length; i++) {
+        const edgeID = incomingDirectedEdges[i];
+        const edgeRef = this.edgeRefs.get(edgeID);
+        this.edgeRefs.delete(edgeID);
+        const connectedVertexID = edgeRef.current.getOtherVertexID(uniqueID);
+
+        const updatedNeighbour = this.adjList
+          .get(connectedVertexID)
+          .filter((id) => id !== edgeID);
+
+        this.adjList.set(connectedVertexID, updatedNeighbour);
+      }
+      this.directedTo.delete(uniqueID);
     }
 
     this.vertexIDs.splice(vertexIndex, 1);
@@ -186,6 +204,45 @@ class Canvas extends React.Component {
         (edge) =>
           edge.props.n1Ref.current.id !== uniqueID &&
           edge.props.n2Ref.current.id !== uniqueID
+      ),
+    });
+  };
+
+  deleteEdge = (n1, n2) => {
+    const n1ID = this.vertexIDs[n1];
+    const n2ID = this.vertexIDs[n2];
+
+    var toDeleteEdgeID = this.isEdgePresent(n1ID, n2ID, true);
+    if (toDeleteEdgeID === false) {
+      console.log("edge NOT +nt");
+      return;
+    }
+
+    const toDeleteEdgeRef = this.edgeRefs.get(toDeleteEdgeID);
+    this.edgeRefs.delete(toDeleteEdgeID);
+
+    const updated1Neighbour = this.adjList
+      .get(n1ID)
+      .filter((edgeID) => edgeID !== toDeleteEdgeID);
+    this.adjList.set(n1ID, updated1Neighbour);
+
+    if (toDeleteEdgeRef.current.props.isDirected === false) {
+      const updated2Neighbour = this.adjList
+        .get(n2ID)
+        .filter((edgeID) => edgeID !== toDeleteEdgeID);
+      this.adjList.set(n2ID, updated2Neighbour);
+    }
+
+    if (toDeleteEdgeRef.current.props.isDirected) {
+      const updated = this.directedTo
+        .get(n2ID)
+        .filter((edgeID) => edgeID !== toDeleteEdgeID);
+      this.directedTo.set(n2ID, updated);
+    }
+
+    this.setState({
+      edges: this.state.edges.filter(
+        (edge) => edge.props.edgeKey !== toDeleteEdgeID
       ),
     });
   };
