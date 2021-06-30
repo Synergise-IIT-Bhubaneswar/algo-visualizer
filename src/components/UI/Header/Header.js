@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 const drawerWidth = 400;
 
@@ -27,8 +28,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     height: "60px",
-    backgroundImage:
-      "url('https://image.freepik.com/free-vector/network-abstract-connections-with-dots-lines-blue-background_110633-574.jpg')",
+    backgroundColor: "#01007C",
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -65,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing(2, 1, 2),
+  },
+  visualizeButton: {
+    "&:disabled": {
+      color: "grey",
+    },
+    fontWeight: "bold",
+    fontFamily: "Segoe UI",
   },
 }));
 
@@ -134,6 +141,7 @@ const Header = (props) => {
                 props.startNode === "Start Node" ||
                 nodeIndices.length === 0
               }
+              className={classes.visualizeButton}
             >
               VISUALIZE&nbsp;
               {props.isVisualizing && (
@@ -141,7 +149,12 @@ const Header = (props) => {
               )}
             </Button>
           </Grid>
-          <Button color="inherit">Github</Button>
+          <a
+            href="https://github.com/rahulpathak-github/algo-visualizer"
+            target="_blank"
+          >
+            <GitHubIcon fontSize="large" style={{ color: "white" }} />
+          </a>
         </Toolbar>
       </AppBar>
       <CustomDrawer
