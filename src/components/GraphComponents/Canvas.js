@@ -155,14 +155,22 @@ class Canvas extends React.Component {
       const edgeID = incidentEdges[i];
       const edgeRef = this.edgeRefs.get(edgeID);
       this.edgeRefs.delete(edgeID);
-      if (edgeRef.current.props.isDirected) continue;
+
       const connectedVertexID = edgeRef.current.getOtherVertexID(uniqueID);
 
-      const updatedNeighbour = this.adjList
-        .get(connectedVertexID)
-        .filter((id) => id !== edgeID);
+      if (edgeRef.current.props.isDirected) {
+        const updatedNeighbour = this.directedTo
+          .get(connectedVertexID)
+          .filter((id) => id !== edgeID);
 
-      this.adjList.set(connectedVertexID, updatedNeighbour);
+        this.directedTo.set(connectedVertexID, updatedNeighbour);
+      } else {
+        const updatedNeighbour = this.adjList
+          .get(connectedVertexID)
+          .filter((id) => id !== edgeID);
+
+        this.adjList.set(connectedVertexID, updatedNeighbour);
+      }
     }
 
     if (this.directedTo.has(uniqueID)) {
