@@ -13,14 +13,14 @@
 
 **[✔]** Visited nodes/edges animations
 
+**[✔]** View Adjacancy List representation for a graph
+
+**[⛏]** Set visualization speed
+
 ## TODO
 
 **[⛏]** Save Visualizations as videos
 
 **[⛏]** Save graphs
 
-**[⛏]** View Adjacancy List representation for a graph
-
 **[⛏]** View visualization logs
-
-**[⛏]** Set visualization speed
