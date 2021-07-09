@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
-import Queue from "./Queue";
+import Queue from "../../helpers/dataStructures/Queue";
 
 const delayTime = 1000;
 const BfsVisualization = (props) => {

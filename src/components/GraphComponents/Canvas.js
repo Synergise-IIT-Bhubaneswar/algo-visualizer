@@ -2,9 +2,10 @@ import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import Edge from "./Edge";
 import Vertex from "./Vertex";
-import DfsVisulization from "../../algorithms/DFS/DfsVisulization";
+import DfsVisualization from "../../algorithms/DFS/DfsVisualization";
 import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
-import AdjList from '../AdjList/AdjList'
+import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
+import AdjList from "../AdjList/AdjList";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -274,13 +275,12 @@ class Canvas extends React.Component {
   render() {
     return (
       <>
-
         <div className="graph">
-
           {this.state.vertices}
           {this.state.edges}
-          {this.props.isVisualizing && this.props.selectedAlgorithm === "DFS" ? (
-            <DfsVisulization
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "DFS" ? (
+            <DfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
               vertexIDs={this.vertexIDs}
@@ -290,8 +290,21 @@ class Canvas extends React.Component {
               endVisualizing={this.endVisualizing}
             />
           ) : null}
-          {this.props.isVisualizing && this.props.selectedAlgorithm === "BFS" ? (
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "BFS" ? (
             <BfsVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Kruskal" ? (
+            <KruskalVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
               vertexIDs={this.vertexIDs}
