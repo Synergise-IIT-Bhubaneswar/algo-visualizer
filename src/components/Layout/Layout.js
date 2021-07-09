@@ -9,8 +9,14 @@ const Layout = () => {
   );
 
   const [isVisualizing, setIsVisualizing] = useState(false)
+  const [speed, setSpeed] = useState(300) // store this dfault speed in some config file
   const [adjListOpen, setAdjListOpen] = useState(false)
   const [startNode, setStartNode] = useState("Start Node")
+
+  const speedChange = (e, value) => {
+    setSpeed(value * 100);
+  }
+
   const selectStartNode = (node) => {
     setStartNode(node);
   }
@@ -45,6 +51,8 @@ const Layout = () => {
         isVisualizing={isVisualizing}
         toggleAdjList={toggleAdjList}
         isAdjListOpen={adjListOpen}
+        speedChange={speedChange}
+        initialSpeed={speed}
       ></Header>
       <Canvas
         startNode={startNode}
@@ -53,7 +61,9 @@ const Layout = () => {
         isVisualizing={isVisualizing}
         selectedAlgorithm={selectedAlgorithm}
         ref={canvasRef}
-        open={adjListOpen} />
+        open={adjListOpen}
+        visualizationSpeed={speed}
+      />
     </div>
   );
 };

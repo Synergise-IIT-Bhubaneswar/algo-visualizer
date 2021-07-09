@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 import UnionFind from "../../helpers/dataStructures/UnionFind";
 
-const delayTime = 1000;
+//const delayTime = 1000;
 const KruskalVisualization = (props) => {
   const vertexIndices = new Map();
   const edgeWeights = [];
-
+  const delayTime = props.visualizationSpeed
   const visualizeKruskal = async () => {
     const unionFind = new UnionFind(props.edgeRefs.size);
 
