@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 
 const delayTime = 1000;
-const DfsVisulization = (props) => {
+const DfsVisualization = (props) => {
   const vertexIndices = new Map();
   const [parent, setParent] = useState(new Array(props.noOfVertices).fill(-1));
 
@@ -55,7 +55,7 @@ const DfsVisulization = (props) => {
     setParent(newParent);
 
     await DFSAlgo(props.vertexIDs[props.startingVertex]);
-    props.endVisualizing()
+    props.endVisualizing();
     // props.vertexRefs
     //   .get(props.vertexIDs[props.startingVertex])
     //   .current.changeBackgroundColor("#01B878");
@@ -73,4 +73,4 @@ const DfsVisulization = (props) => {
   return <div></div>;
 };
 
-export default DfsVisulization;
+export default DfsVisualization;
