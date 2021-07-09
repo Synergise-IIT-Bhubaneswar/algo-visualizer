@@ -36,7 +36,7 @@ const KruskalVisualization = (props) => {
     }
 
     props.edgeRefs.forEach((edgeRef, edgeID) => {
-      edgeWeights.push([edgeRef.current.props.weight, edgeRef]);
+      edgeWeights.push([parseInt(edgeRef.current.props.weight), edgeRef]);
     });
 
     edgeWeights.sort((x, y) => {

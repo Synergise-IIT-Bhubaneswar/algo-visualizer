@@ -5,6 +5,7 @@ import Vertex from "./Vertex";
 import DfsVisualization from "../../algorithms/DFS/DfsVisualization";
 import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
+import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import AdjList from "../AdjList/AdjList";
 
 class Canvas extends React.Component {
@@ -279,7 +280,7 @@ class Canvas extends React.Component {
           {this.state.vertices}
           {this.state.edges}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "DFS" ? (
+          this.props.selectedAlgorithm === "DFS" ? (
             <DfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -292,7 +293,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "BFS" ? (
+          this.props.selectedAlgorithm === "BFS" ? (
             <BfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -305,7 +306,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "Kruskal" ? (
+          this.props.selectedAlgorithm === "Kruskal MST" ? (
             <KruskalVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -315,6 +316,18 @@ class Canvas extends React.Component {
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Prim MST" ? (
+            <PrimVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
             />
           ) : null}
         </div>
