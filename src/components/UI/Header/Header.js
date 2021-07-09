@@ -176,6 +176,8 @@ const Header = (props) => {
         open={open}
         handleDrawerClose={handleDrawerClose}
         canvasRef={props.canvasRef}
+        speedChange={props.speedChange}
+        initialSpeed={props.initialSpeed}
       />
     </div>
   );

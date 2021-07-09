@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 
-const delayTime = 1000;
+//const delayTime = 1000;
 const DfsVisualization = (props) => {
   const vertexIndices = new Map();
+  const delayTime = props.visualizationSpeed
   const [parent, setParent] = useState(new Array(props.noOfVertices).fill(-1));
 
   const DFSAlgo = async (vertexID) => {

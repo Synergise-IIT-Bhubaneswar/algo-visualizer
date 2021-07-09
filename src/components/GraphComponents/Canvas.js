@@ -288,6 +288,7 @@ class Canvas extends React.Component {
               edgeRefs={this.edgeRefs}
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
           {this.props.isVisualizing &&
@@ -300,6 +301,7 @@ class Canvas extends React.Component {
               edgeRefs={this.edgeRefs}
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
           {this.props.isVisualizing &&
@@ -312,6 +314,7 @@ class Canvas extends React.Component {
               edgeRefs={this.edgeRefs}
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
         </div>

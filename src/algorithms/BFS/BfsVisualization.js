@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 import Queue from "../../helpers/dataStructures/Queue";
 
-const delayTime = 1000;
+//const delayTime = 1000;
 const BfsVisualization = (props) => {
   const vertexIndices = new Map();
+  const delayTime = props.visualizationSpeed
   const [visited, setVisited] = useState(
     new Array(props.noOfVertices).fill(-1)
   );

@@ -28,6 +28,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormLabel from "@material-ui/core/FormLabel";
+import Slider from '@material-ui/core/Slider';
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+  },
+  slider: {
+    width: "50%"
   },
   drawerHeader: {
     //overflowY: "scroll",
@@ -295,8 +299,33 @@ const CustomDrawer = (props) => {
               click={(e) => openStartNodeMenu(e)}
             ></Menu>
           </ListItem>
-          <Divider />
+          {/* <Divider /> */}
+
+
           <ListItem>
+            <ListItemIcon>
+              {/* <TimelineIcon fontSize="large" /> */}
+            </ListItemIcon>
+            <ListItemText primary="Speed" />
+            <div className={classes.slider}>
+              <Slider
+                defaultValue={parseInt(props.initialSpeed) / 100}
+                // getAriaValueText={valuetext}
+                onChange={props.speedChange}
+                aria-labelledby="discrete-slider"
+                valueLabelDisplay="auto"
+                step={1}
+                marks
+                min={1}
+                max={10}
+              />
+            </div>
+          </ListItem>
+
+          <Divider />
+
+
+          {/* <ListItem>
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
@@ -305,7 +334,7 @@ const CustomDrawer = (props) => {
               secondary="asfasfmc.ngkresjg jrgbkjrvgkjcrngjkergbkjergbjkdf vdn vjdsbgjkergbjdsv dsjgbkjsb vjnd djfg jh vdjnjdhg jdfv jdhrgvb d jdrhg jvh"
             ></ListItemText>
           </ListItem>
-          <Divider />
+          <Divider /> */}
           <ListItem>
             <ListItemIcon>
               <SettingsIcon fontSize="large" />
