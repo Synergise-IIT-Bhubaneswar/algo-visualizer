@@ -14,7 +14,10 @@ const useStyles = makeStyles((theme) => ({
 
     nodes: {
         display: 'flex',
-        flexDirection: "column"
+        flexDirection: "column",
+        '& > *': {
+            margin: theme.spacing(0.2),
+        },
     }
 
 }));
@@ -24,7 +27,16 @@ const useStyles = makeStyles((theme) => ({
 const AdjList = props => {
     const eds = []
     const classes = useStyles();
-    const nodes = props.nodeIndices.map((key) => (<Button key={key}>{props.nodeIndices.indexOf(key)}</Button>))
+    const nodes = props.nodeIndices.map((key) => (
+        <ButtonGroup
+            orientation="vertical"
+            color="secondary"
+            aria-label="vertical outlined primary button group"
+        >
+            <Button key={key}>{props.nodeIndices.indexOf(key)}</Button>
+            {/* {nodes} */}
+        </ButtonGroup>
+    ))
     const [edges, setEdges] = useState(null)
     // const getOtherNodeID = (id, key) => {
     //     props.edgeRefs.get(id).current.getOtherVertexID(key)
@@ -38,7 +50,7 @@ const AdjList = props => {
             // console.log(key)
             let children
             if (props.adjList.get(key).length === 0) {
-                children = (<Button>{"NULL"}</Button>);
+                children = (<Button>\</Button>);
                 // console.log("Children NULL")
             }
             else {
@@ -58,7 +70,7 @@ const AdjList = props => {
                     orientation="horizontal"
                     color="primary"
                     aria-label="horizontal contained primary button group"
-                    variant="contained"
+                // variant="contained"
                 >
                     {/* <Button>1233</Button> */}
                     {children}
@@ -74,13 +86,17 @@ const AdjList = props => {
 
     return (
         <div className={classes.root}>
-            <ButtonGroup
+            {/* <ButtonGroup
                 orientation="vertical"
                 color="primary"
                 aria-label="vertical outlined primary button group"
-            >
+            > */}
+            <div className={classes.nodes}>
+
                 {nodes}
-            </ButtonGroup>
+            </div>
+
+            {/* </ButtonGroup> */}
             <div className={classes.nodes}>
 
                 {edges}
