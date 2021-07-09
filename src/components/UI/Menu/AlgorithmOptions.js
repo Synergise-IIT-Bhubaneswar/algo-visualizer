@@ -1,9 +1,9 @@
 const AlgorithmOptions = [
-    'DFS',
-    'BFS',
-    'Ford Fulkerson',
-    'Kosaraju\'s'
+  "DFS",
+  "BFS",
+  "Kruskal",
+  "Ford Fulkerson",
+  "Kosaraju's",
+];
 
-]
-
-export default AlgorithmOptions
+export default AlgorithmOptions;
