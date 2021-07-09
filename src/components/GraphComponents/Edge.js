@@ -96,7 +96,12 @@ class Edge extends React.Component {
               >
                 {this.props.weight}
               </text>
-              {this.props.isDirected && <polygon points="0 0, 6 2, 0 4" />}
+              {this.props.isDirected && (
+                <polygon
+                  points="0 0, 6 2, 0 4"
+                  fill={this.state.styles.stroke}
+                />
+              )}
             </marker>
           </defs>
           <polyline
