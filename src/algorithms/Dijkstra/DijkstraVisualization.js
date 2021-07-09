@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 import MinHeap from "../../helpers/dataStructures/MinHeap";
 
-
-// const delayTime = 1000
-const PrimVisualization = (props) => {
+//const delayTime = 1000;
+const DijkstraVisualization = (props) => {
   const delayTime = props.visualizationSpeed;
 
   const vertexIndices = new Map();
   const parent = new Array(props.noOfVertices);
-  const delayTime = props.visualizationSpeed
-  const visualizePrim = async () => {
+
+  const visualizeDijkstra = async () => {
     const minHeap = new MinHeap(props.noOfVertices);
     minHeap.decreaseKey(props.startingVertex, 0);
 
     while (!minHeap.isEmpty()) {
+      const currWeight = minHeap.getMinValue();
       const vertexID = props.vertexIDs[minHeap.extractMin()];
       const neighbours = props.adjList
         .get(vertexID)
@@ -30,11 +30,10 @@ const PrimVisualization = (props) => {
         if (!minHeap.isPresent(connectedVertexIndex)) continue;
 
         const weight = parseInt(neighbours[i].current.props.weight);
-
         neighbours[i].current.changeBackgroundColor("#ED3C61");
         await asyncTimeOut(delayTime);
 
-        if (minHeap.decreaseKey(connectedVertexIndex, weight)) {
+        if (minHeap.decreaseKey(connectedVertexIndex, currWeight + weight)) {
           const prevConnectedEdge = parent[connectedVertexIndex];
 
           if (prevConnectedEdge != -1)
@@ -59,10 +58,10 @@ const PrimVisualization = (props) => {
     }
     parent.fill(-1);
 
-    visualizePrim();
+    visualizeDijkstra();
   }, []);
 
   return <div></div>;
 };
 
-export default PrimVisualization;
+export default DijkstraVisualization;

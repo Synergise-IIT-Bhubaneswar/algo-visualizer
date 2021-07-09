@@ -2,22 +2,22 @@ const MAX = 1000000;
 class MinHeap {
   constructor(len) {
     this.size = len;
-    this.minHeap = [];
+    this.heap = [];
     this.indexOf = [];
 
     for (var i = 0; i < len; i++) {
-      this.minHeap.push([MAX, i]);
+      this.heap.push([MAX, i]);
       this.indexOf.push(i);
     }
   }
 
   swap = (ind1, ind2) => {
-    this.indexOf[this.minHeap[ind1][1]] = ind2;
-    this.indexOf[this.minHeap[ind2][1]] = ind1;
+    this.indexOf[this.heap[ind1][1]] = ind2;
+    this.indexOf[this.heap[ind2][1]] = ind1;
 
-    const tmp = this.minHeap[ind1];
-    this.minHeap[ind1] = this.minHeap[ind2];
-    this.minHeap[ind2] = tmp;
+    const tmp = this.heap[ind1];
+    this.heap[ind1] = this.heap[ind2];
+    this.heap[ind2] = tmp;
   };
 
   parent = (ind) => {
@@ -26,13 +26,13 @@ class MinHeap {
 
   decreaseKey = (vertex, val) => {
     let index = this.indexOf[vertex];
-    if (this.minHeap[index][0] <= val) return false;
+    if (this.heap[index][0] <= val) return false;
 
-    this.minHeap[index][0] = val;
+    this.heap[index][0] = val;
 
     while (
       index !== 0 &&
-      this.minHeap[index][0] < this.minHeap[this.parent(index)][0]
+      this.heap[index][0] < this.heap[this.parent(index)][0]
     ) {
       this.swap(index, this.parent(index));
       index = this.parent(index);
@@ -45,15 +45,15 @@ class MinHeap {
     if (this.size <= 0) return null;
     if (this.size == 1) {
       this.size = 0;
-      this.indexOf[this.minHeap[0][1]] = -1;
-      return this.minHeap[0][1];
+      this.indexOf[this.heap[0][1]] = -1;
+      return this.heap[0][1];
     }
 
-    const minElement = this.minHeap[0][1];
+    const minElement = this.heap[0][1];
     this.indexOf[minElement] = -1;
 
-    this.minHeap[0] = this.minHeap[this.size - 1];
-    this.indexOf[this.minHeap[0][1]] = 0;
+    this.heap[0] = this.heap[this.size - 1];
+    this.indexOf[this.heap[0][1]] = 0;
 
     this.size--;
     this.minHeapify(0);
@@ -66,9 +66,9 @@ class MinHeap {
     const right = 2 * par + 2;
     let smallest = par;
 
-    if (left < this.size && this.minHeap[left][0] < this.minHeap[smallest][0])
+    if (left < this.size && this.heap[left][0] < this.heap[smallest][0])
       smallest = left;
-    if (right < this.size && this.minHeap[right][0] < this.minHeap[smallest][0])
+    if (right < this.size && this.heap[right][0] < this.heap[smallest][0])
       smallest = right;
 
     if (smallest != par) {
@@ -85,6 +85,10 @@ class MinHeap {
   isPresent = (vertex) => {
     if (this.indexOf[vertex] === -1) return false;
     return true;
+  };
+
+  getMinValue = () => {
+    return this.heap[0][0];
   };
 }
 
