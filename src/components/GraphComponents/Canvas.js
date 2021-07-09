@@ -6,6 +6,7 @@ import DfsVisualization from "../../algorithms/DFS/DfsVisualization";
 import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
 import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
+import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
 import AdjList from "../AdjList/AdjList";
 
 class Canvas extends React.Component {
@@ -328,6 +329,20 @@ class Canvas extends React.Component {
               edgeRefs={this.edgeRefs}
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Dijkstra" ? (
+            <DijkstraVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
         </div>
