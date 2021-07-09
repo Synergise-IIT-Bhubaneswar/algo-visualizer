@@ -98,7 +98,7 @@ class Canvas extends React.Component {
     const n1ID = this.vertexIDs[n1];
     const n2ID = this.vertexIDs[n2];
     if (this.isEdgePresent(n1ID, n2ID, isDirected) !== false) {
-      console.log("edge already +nt");
+      // console.log("edge already +nt");
       return;
     }
 
@@ -226,7 +226,7 @@ class Canvas extends React.Component {
 
     var toDeleteEdgeID = this.isEdgePresent(n1ID, n2ID, true);
     if (toDeleteEdgeID === false) {
-      console.log("edge NOT +nt");
+      // console.log("edge NOT +nt");
       return;
     }
 
@@ -281,7 +281,7 @@ class Canvas extends React.Component {
           {this.state.vertices}
           {this.state.edges}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "DFS" ? (
+            this.props.selectedAlgorithm === "DFS" ? (
             <DfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -294,7 +294,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "BFS" ? (
+            this.props.selectedAlgorithm === "BFS" ? (
             <BfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -307,7 +307,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Kruskal MST" ? (
+            this.props.selectedAlgorithm === "Kruskal MST" ? (
             <KruskalVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -320,7 +320,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Prim MST" ? (
+            this.props.selectedAlgorithm === "Prim MST" ? (
             <PrimVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -333,7 +333,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Dijkstra" ? (
+            this.props.selectedAlgorithm === "Dijkstra" ? (
             <DijkstraVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}

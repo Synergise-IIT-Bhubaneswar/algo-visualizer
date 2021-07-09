@@ -98,7 +98,7 @@ const Header = (props) => {
     for (let i = 0; i < props.canvasRef.current.state.noOfVertices; i++) {
       newNodeIndices.push(i);
     }
-    console.log("useEff");
+    // console.log("useEff");
     setNodeIndices(newNodeIndices);
   }, [
     props.canvasRef.current

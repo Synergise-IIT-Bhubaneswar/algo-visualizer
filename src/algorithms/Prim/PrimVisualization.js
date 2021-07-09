@@ -5,8 +5,6 @@ import MinHeap from "../../helpers/dataStructures/MinHeap";
 
 // const delayTime = 1000
 const PrimVisualization = (props) => {
-  const delayTime = props.visualizationSpeed;
-
   const vertexIndices = new Map();
   const parent = new Array(props.noOfVertices);
   const delayTime = props.visualizationSpeed
