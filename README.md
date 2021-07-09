@@ -1,11 +1,15 @@
 # Algo-Visualizer
 
-- An interactive tool to learn graph algorithms easily
+- An interactive tool to viusalize algorithms easily
 - Built with React and MaterialUI
+
+![Visualizing](./public/screenshots/sc1.jpg)
+
+![Interact with graphs](./public/screenshots/sc2.jpg)
 
 ## Current Features
 
-**[✔]** Add, move and delete nodes
+**[✔]** Add, move and delete nodes and edges
 
 **[✔]** Directed/Undirected edges
 
@@ -15,7 +19,7 @@
 
 **[✔]** View Adjacancy List representation for a graph
 
-**[⛏]** Set visualization speed
+**[✔]** Set visualization speed
 
 ## TODO
 
