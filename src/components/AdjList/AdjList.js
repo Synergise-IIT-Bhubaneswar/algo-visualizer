@@ -36,13 +36,21 @@ const AdjList = props => {
             // )
             // console.log(props.nodeIndices.indexOf(key))
             // console.log(key)
-            const children = props.adjList.get(key).map(id => {
-                const otherID = props.edgeRefs.get(id).current.getOtherVertexID(key)//getOtherNodeID(id, key)
-                console.log(otherID)
-                return (<Button key={id}>
-                    {props.nodeIndices.indexOf(otherID)}
-                </Button>)
-            })
+            let children
+            if (props.adjList.get(key).length === 0) {
+                children = (<Button>{"NULL"}</Button>);
+                // console.log("Children NULL")
+            }
+            else {
+                children = props.adjList.get(key).map(id => {
+                    const otherID = props.edgeRefs.get(id).current.getOtherVertexID(key)//getOtherNodeID(id, key)
+                    console.log(otherID)
+                    return (<Button key={id}>
+                        {props.nodeIndices.indexOf(otherID)}
+                    </Button>)
+                })
+            }
+
             //return (
             return (
                 <ButtonGroup
@@ -52,7 +60,7 @@ const AdjList = props => {
                     aria-label="horizontal contained primary button group"
                     variant="contained"
                 >
-                    {/* <Button>Hello</Button> */}
+                    {/* <Button>1233</Button> */}
                     {children}
                 </ButtonGroup >)
             // return
