@@ -5,6 +5,7 @@ import Vertex from "./Vertex";
 import DfsVisualization from "../../algorithms/DFS/DfsVisualization";
 import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
+import AdjList from "../AdjList/AdjList";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -273,44 +274,53 @@ class Canvas extends React.Component {
 
   render() {
     return (
-      <div className="graph">
-        {this.state.vertices}
-        {this.state.edges}
-        {this.props.isVisualizing && this.props.selectedAlgorithm === "DFS" ? (
-          <DfsVisualization
-            startingVertex={parseInt(this.props.startNode)}
-            noOfVertices={this.state.noOfVertices}
-            vertexIDs={this.vertexIDs}
-            vertexRefs={this.vertexRefs}
-            edgeRefs={this.edgeRefs}
-            adjList={this.adjList}
-            endVisualizing={this.endVisualizing}
-          />
-        ) : null}
-        {this.props.isVisualizing && this.props.selectedAlgorithm === "BFS" ? (
-          <BfsVisualization
-            startingVertex={parseInt(this.props.startNode)}
-            noOfVertices={this.state.noOfVertices}
-            vertexIDs={this.vertexIDs}
-            vertexRefs={this.vertexRefs}
-            edgeRefs={this.edgeRefs}
-            adjList={this.adjList}
-            endVisualizing={this.endVisualizing}
-          />
-        ) : null}
-        {this.props.isVisualizing &&
-        this.props.selectedAlgorithm === "Kruskal" ? (
-          <KruskalVisualization
-            startingVertex={parseInt(this.props.startNode)}
-            noOfVertices={this.state.noOfVertices}
-            vertexIDs={this.vertexIDs}
-            vertexRefs={this.vertexRefs}
-            edgeRefs={this.edgeRefs}
-            adjList={this.adjList}
-            endVisualizing={this.endVisualizing}
-          />
-        ) : null}
-      </div>
+      <>
+        <div className="graph">
+          {this.state.vertices}
+          {this.state.edges}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "DFS" ? (
+            <DfsVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "BFS" ? (
+            <BfsVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Kruskal" ? (
+            <KruskalVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+            />
+          ) : null}
+        </div>
+        <AdjList
+          adjList={this.adjList}
+          nodeIndices={this.vertexIDs}
+          edgeRefs={this.edgeRefs}
+        ></AdjList>
+      </>
     );
   }
 }
