@@ -309,7 +309,7 @@ const CustomDrawer = (props) => {
             <ListItemText primary="Speed" />
             <div className={classes.slider}>
               <Slider
-                defaultValue={parseInt(props.initialSpeed) / 100}
+                defaultValue={3}
                 // getAriaValueText={valuetext}
                 onChange={props.speedChange}
                 aria-labelledby="discrete-slider"

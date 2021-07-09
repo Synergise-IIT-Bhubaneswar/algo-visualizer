@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 import MinHeap from "../../helpers/dataStructures/MinHeap";
 
-//const delayTime = 1000;
+
+// const delayTime = 1000
 const PrimVisualization = (props) => {
   const delayTime = props.visualizationSpeed;
 
   const vertexIndices = new Map();
   const parent = new Array(props.noOfVertices);
-
+  const delayTime = props.visualizationSpeed
   const visualizePrim = async () => {
     const minHeap = new MinHeap(props.noOfVertices);
     minHeap.decreaseKey(props.startingVertex, 0);

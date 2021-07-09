@@ -86,11 +86,9 @@ const AdjList = (props) => {
           aria-label="horizontal contained primary button group"
           // variant="contained"
         >
-          {/* <Button>1233</Button> */}
-          {children}
-          <Button disabled classes={{ disabled: classes.disabledButton }}>
-            \
-          </Button>
+            <Button key={key + "123"}>{props.nodeIndices.indexOf(key)}</Button>
+            {/* {nodes} */}
+
         </ButtonGroup>
       );
       // return
