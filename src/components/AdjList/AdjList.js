@@ -51,7 +51,7 @@ const AdjList = props => {
             color="secondary"
             aria-label="vertical outlined primary button group"
         >
-            <Button key={key}>{props.nodeIndices.indexOf(key)}</Button>
+            <Button key={key + "123"}>{props.nodeIndices.indexOf(key)}</Button>
             {/* {nodes} */}
         </ButtonGroup>
     ))
