@@ -279,7 +279,7 @@ class Canvas extends React.Component {
           {this.state.vertices}
           {this.state.edges}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "DFS" ? (
+            this.props.selectedAlgorithm === "DFS" ? (
             <DfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -291,7 +291,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "BFS" ? (
+            this.props.selectedAlgorithm === "BFS" ? (
             <BfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -303,7 +303,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Kruskal" ? (
+            this.props.selectedAlgorithm === "Kruskal" ? (
             <KruskalVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -319,6 +319,7 @@ class Canvas extends React.Component {
           adjList={this.adjList}
           nodeIndices={this.vertexIDs}
           edgeRefs={this.edgeRefs}
+          open={this.props.open}
         ></AdjList>
       </>
     );

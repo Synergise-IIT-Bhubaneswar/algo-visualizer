@@ -148,6 +148,16 @@ const Header = (props) => {
                 <CircularProgress size={20} color="inherit" />
               )}
             </Button>
+            &nbsp;&nbsp;
+            <Button
+              variant="contained"
+              color="default"
+              size="large"
+              onClick={() => props.toggleAdjList()}
+              className={classes.visualizeButton}
+            >
+              {(props.isAdjListOpen ? "CLOSE" : "VIEW") + " ADJ LIST"}
+            </Button>
           </Grid>
           <a
             href="https://github.com/rahulpathak-github/algo-visualizer"

@@ -2,11 +2,25 @@ import { useState, useEffect } from "react";
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    container: {
         display: 'flex',
-        margin: "10vh auto auto 80vw",
+        margin: "10vh 0 0 50vw",
+    },
+    paper: {
+        margin: theme.spacing(1),
+        zIndex: "1000",
+        width: "100vw",
+        overflow: "scroll",
+        maxHeight: "80vh"
+    },
+    list: {
+        display: 'flex',
+        justifyContent: "center",
+        margin: "auto auto",
         '& > *': {
             margin: theme.spacing(1),
         },
@@ -38,6 +52,7 @@ const AdjList = props => {
         </ButtonGroup>
     ))
     const [edges, setEdges] = useState(null)
+    const [open, setOpen] = useState(true)
     // const getOtherNodeID = (id, key) => {
     //     props.edgeRefs.get(id).current.getOtherVertexID(key)
     // }
@@ -50,7 +65,7 @@ const AdjList = props => {
             // console.log(key)
             let children
             if (props.adjList.get(key).length === 0) {
-                children = (<Button>\</Button>);
+                children = (<Button disabled>\</Button>);
                 // console.log("Children NULL")
             }
             else {
@@ -85,23 +100,32 @@ const AdjList = props => {
 
 
     return (
-        <div className={classes.root}>
-            {/* <ButtonGroup
+        <>
+            <div className={classes.container}>
+                <Fade in={props.open}>
+                    <Paper elevation={4} className={classes.paper}>
+                        <div className={classes.list}>
+                            {/* <ButtonGroup
                 orientation="vertical"
                 color="primary"
                 aria-label="vertical outlined primary button group"
             > */}
-            <div className={classes.nodes}>
+                            <div className={classes.nodes}>
 
-                {nodes}
+                                {nodes}
+                            </div>
+
+                            {/* </ButtonGroup> */}
+                            <div className={classes.nodes}>
+
+                                {edges}
+                            </div>
+                        </div>
+                    </Paper>
+                </Fade>
             </div>
 
-            {/* </ButtonGroup> */}
-            <div className={classes.nodes}>
-
-                {edges}
-            </div>
-        </div>
+        </>
     );
 }
 

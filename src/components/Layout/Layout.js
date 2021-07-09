@@ -9,6 +9,7 @@ const Layout = () => {
   );
 
   const [isVisualizing, setIsVisualizing] = useState(false)
+  const [adjListOpen, setAdjListOpen] = useState(false)
   const [startNode, setStartNode] = useState("Start Node")
   const selectStartNode = (node) => {
     setStartNode(node);
@@ -16,6 +17,10 @@ const Layout = () => {
 
   const startVisualizing = () => {
     setIsVisualizing(true)
+  }
+
+  const toggleAdjList = () => {
+    setAdjListOpen(prev => !prev)
   }
 
   const endVisualizing = () => {
@@ -38,6 +43,8 @@ const Layout = () => {
         canvasRef={canvasRef}
         startVisualizing={startVisualizing}
         isVisualizing={isVisualizing}
+        toggleAdjList={toggleAdjList}
+        isAdjListOpen={adjListOpen}
       ></Header>
       <Canvas
         startNode={startNode}
@@ -45,7 +52,8 @@ const Layout = () => {
         visualizationEnd={endVisualizing}
         isVisualizing={isVisualizing}
         selectedAlgorithm={selectedAlgorithm}
-        ref={canvasRef} />
+        ref={canvasRef}
+        open={adjListOpen} />
     </div>
   );
 };
