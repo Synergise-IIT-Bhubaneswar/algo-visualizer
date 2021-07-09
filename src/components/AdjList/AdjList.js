@@ -10,12 +10,16 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         margin: "10vh 0 0 50vw",
     },
+    disabledButton: {
+        backgroundColor: '#808080'
+    },
     paper: {
         margin: theme.spacing(1),
         zIndex: "1000",
         width: "100vw",
         overflow: "scroll",
-        maxHeight: "80vh"
+        maxHeight: "80vh",
+        backgroundColor: "#000000"
     },
     list: {
         display: 'flex',
@@ -52,7 +56,7 @@ const AdjList = props => {
         </ButtonGroup>
     ))
     const [edges, setEdges] = useState(null)
-    const [open, setOpen] = useState(true)
+    // const [open, setOpen] = useState(true)
     // const getOtherNodeID = (id, key) => {
     //     props.edgeRefs.get(id).current.getOtherVertexID(key)
     // }
@@ -65,7 +69,8 @@ const AdjList = props => {
             // console.log(key)
             let children
             if (props.adjList.get(key).length === 0) {
-                children = (<Button disabled>\</Button>);
+                children = (null)
+                // children = (<Button disabled classes={{ disabled: classes.disabledButton }}>\</Button>);
                 // console.log("Children NULL")
             }
             else {
@@ -89,6 +94,7 @@ const AdjList = props => {
                 >
                     {/* <Button>1233</Button> */}
                     {children}
+                    <Button disabled classes={{ disabled: classes.disabledButton }}>\</Button>
                 </ButtonGroup >)
             // return
             //)
