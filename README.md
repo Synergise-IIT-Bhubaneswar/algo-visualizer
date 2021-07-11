@@ -1,4 +1,4 @@
-# Algo-Visualizer
+# Algo-Visualizer [[Visit]](https://algo-visualizer-f76e9.web.app/)
 
 - An interactive tool to viusalize algorithms easily
 - Built with React and MaterialUI
