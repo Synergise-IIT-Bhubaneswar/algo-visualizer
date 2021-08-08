@@ -42,8 +42,14 @@ class Vertex extends Component {
 
   dragging = (e) => {
     if (this.isDragging) {
-      const newLeft = e.clientX - vertexRadius;
-      const newTop = e.clientY - vertexRadius;
+      let newLeft, newTop;
+      if (e.type === "touchmove") {
+        newLeft = e.touches[0].clientX - vertexRadius;
+        newTop = e.touches[0].clientY - vertexRadius;
+      } else {
+        newLeft = e.clientX - vertexRadius;
+        newTop = e.clientY - vertexRadius;
+      }
       this.setState({
         styles: {
           left: newLeft,
@@ -85,6 +91,9 @@ class Vertex extends Component {
         onMouseDown={this.dragStart}
         onMouseMove={this.dragging}
         onMouseUp={this.dragEnd}
+        onTouchStart={this.dragStart}
+        onTouchMove={this.dragging}
+        onTouchEnd={this.dragEnd}
       >
         <h3>{this.state.vertexIndex} </h3>
       </div>
