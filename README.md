@@ -3,6 +3,8 @@
 - An interactive tool to viusalize algorithms easily
 - Built with React and MaterialUI
 
+(For mobiles, use "Desktop Mode" for better experience)
+
 ![Visualizing](./public/screenshots/sc1.jpg)
 
 ![Interact with graphs](./public/screenshots/sc2.jpg)
