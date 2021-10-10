@@ -32,7 +32,8 @@ The package manager is [`yarn`](https://classic.yarnpkg.com/lang/en/docs/install
 ```posh
 git clone https://github.com/<YOUR_GITHUB_HANDLE>/algo-visualizer
 ```
-Make sure to replace <YOUR_GITHUB_HANDLE> with your github handle.
+   Make sure to replace <YOUR_GITHUB_HANDLE> with your github handle.
+
 3. Move into the new `algo-visualizer` directory using
 ```posh
 cd algo-visualizer
