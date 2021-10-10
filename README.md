@@ -46,6 +46,10 @@ yarn
 ```posh
 yarn start
 ```
+6. To contribute, create a NEW branch (ussing the command given below) and add your code then
+```posh
+git checkout -b my-new-branch
+```
 
 <br />
 
