@@ -22,6 +22,32 @@ Most people face difficulty when they start learning graph theory and related al
 
 <br />
 
+## Setting up the project locally
+
+This project uses [React](https://reactjs.org/) and [MaterialUI v4](https://v4.mui.com/).
+The package manager is [`yarn`](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable). We recommend that you install it through `npm`. To install `npm`, install [node.js](https://nodejs.org/en/download/).
+
+1. Fork this repository
+2. Clone your fork using 
+```posh
+git clone https://github.com/<YOUR_GITHUB_HANDLE>/algo-visualizer
+```
+Make sure to replace <YOUR_GITHUB_HANDLE> with your github handle.
+3. Move into the new `algo-visualizer` directory using
+```posh
+cd algo-visualizer
+```
+4. Install the dependencies using
+```posh
+yarn
+```
+5. To start the development server, use
+```posh
+yarn start
+```
+
+<br />
+
 ## Contents
 
 The current version of this project can be divided into 3 major parts-
