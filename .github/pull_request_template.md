@@ -2,7 +2,7 @@
 Thank you for sending the PR! We appreciate you spending the time to work on these changes.
 
 Help us understand your motivation by explaining why you decided to make this change.
-You can learn more about contributing to NeoAlgo here: https://github.com/TesseractCoding/NeoAlgo/blob/master/CONTRIBUTING.md
+You can learn more about contributing to Algo-Visualizer here: https://github.com/rahulpathak-github/algo-visualizer/blob/main/CONTRIBUTING.md
 
 Happy Contributing!
 
