@@ -12,6 +12,8 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const drawerWidth = 400;
 
@@ -80,6 +82,7 @@ const Header = (props) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [nodeIndices, setNodeIndices] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -90,6 +93,13 @@ const Header = (props) => {
   };
 
   const startVisualizing = () => {
+    if (props.selectedAlgorithm === "Topological Sort") {
+      if (!props.canvasRef.current.isGraphDAG()) {
+        setSnackbarOpen(true);
+        return;
+      }
+    }
+
     props.startVisualizing();
     props.canvasRef.current.startVisualizing();
   };
@@ -179,6 +189,26 @@ const Header = (props) => {
         speedChange={props.speedChange}
         initialSpeed={props.initialSpeed}
       />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => {
+          setSnackbarOpen(false);
+        }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={() => {
+            setSnackbarOpen(false);
+          }}
+          severity="warning"
+        >
+          "Your Graph is not DAG !, Topological Sort is enabled only on DAG"
+        </MuiAlert>
+      </Snackbar>
+      ;
     </div>
   );
 };
