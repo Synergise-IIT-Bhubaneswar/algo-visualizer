@@ -7,6 +7,7 @@ import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
 import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
+import TopologicalSortVisualization from "../../algorithms/TopologicalSort/TopologicalSortVisualization";
 import AdjList from "../AdjList/AdjList";
 
 class Canvas extends React.Component {
@@ -287,7 +288,6 @@ class Canvas extends React.Component {
         }
       }
     }
-    // console.log("There are no undirected edges");
     return true;
   };
 
@@ -419,6 +419,19 @@ class Canvas extends React.Component {
           {this.props.isVisualizing &&
           this.props.selectedAlgorithm === "Dijkstra" ? (
             <DijkstraVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
+            />
+          ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Topological Sort" ? (
+            <TopologicalSortVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
               vertexIDs={this.vertexIDs}
