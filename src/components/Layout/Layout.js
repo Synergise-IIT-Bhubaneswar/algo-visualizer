@@ -8,33 +8,38 @@ const Layout = () => {
     AlgorithmOptions[0]
   );
 
-  const [isVisualizing, setIsVisualizing] = useState(false)
-  const [speed, setSpeed] = useState(1000) // store this dfault speed in some config file
-  const [adjListOpen, setAdjListOpen] = useState(false)
-  const [startNode, setStartNode] = useState("Start Node")
+  const [isVisualizing, setIsVisualizing] = useState(false);
+  const [speed, setSpeed] = useState(1000); // store this dfault speed in some config file
+  const [adjListOpen, setAdjListOpen] = useState(false);
+  const [startNode, setStartNode] = useState("Start Node");
+  const [topoModalOpen, setTopoModalOpen] = useState(false);
 
   const speedChange = (e, value) => {
     setSpeed(3000 / value);
-  }
+  };
 
   const selectStartNode = (node) => {
     setStartNode(node);
-  }
+  };
 
   const startVisualizing = () => {
-    setIsVisualizing(true)
-  }
+    setIsVisualizing(true);
+  };
 
   const toggleAdjList = () => {
-    setAdjListOpen(prev => !prev)
-  }
+    setAdjListOpen((prev) => !prev);
+  };
 
   const endVisualizing = () => {
-    setIsVisualizing(false)
-  }
+    setIsVisualizing(false);
+  };
 
   const selectAlgorithm = (algorithm) => {
     setSelectedAlgorithm(algorithm);
+  };
+
+  const toggleTopoModal = (action) => {
+    setTopoModalOpen(action);
   };
 
   const canvasRef = useRef(null);
@@ -63,6 +68,8 @@ const Layout = () => {
         ref={canvasRef}
         open={adjListOpen}
         visualizationSpeed={speed}
+        topoModalOpen={topoModalOpen}
+        setTopoModalOpen={toggleTopoModal}
       />
     </div>
   );
