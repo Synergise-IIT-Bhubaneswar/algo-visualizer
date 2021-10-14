@@ -8,7 +8,8 @@ import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization"
 import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
 import AdjList from "../AdjList/AdjList";
-
+import asyncTimeOut from "../../helpers/asyncTimeOut";
+import PositionedSnackbar from "../UI/Components/SnackBar";
 class Canvas extends React.Component {
   constructor(props) {
     super(props);
@@ -17,12 +18,16 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
+    this.vertexIndices = new Map();
     // this stores the directed edge incident TO a vertex
     this.state = {
       visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      parent: [],
+      showDialog: false,
+      message: "",
     };
   }
 
@@ -50,9 +55,10 @@ class Canvas extends React.Component {
         moveIncidentEdges={this.moveEdge}
         uniqueID={uniqueID}
         key={uniqueID}
+        getShortestPath={this.getShortestPath}
       />
     );
-
+    this.vertexIndices.set(uniqueID, this.vertexIDs.length);
     this.vertexIDs.push(uniqueID);
     this.vertexRefs.set(uniqueID, newVertexRef);
     this.adjList.set(uniqueID, []);
@@ -130,6 +136,7 @@ class Canvas extends React.Component {
 
     this.setState({
       edges: newEdges,
+      parent: [],
     });
   };
 
@@ -139,11 +146,14 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
+    this.vertexIndices = new Map();
+
     this.setState({
       visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      parent: [],
     });
     this.props.visualizationEnd();
   };
@@ -152,6 +162,7 @@ class Canvas extends React.Component {
   deleteVertex = (vertexIndex) => {
     const uniqueID = this.vertexIDs[vertexIndex];
     this.vertexRefs.delete(uniqueID);
+    this.vertexIndices.delete(uniqueID);
 
     const incidentEdges = this.adjList.get(uniqueID);
 
@@ -217,6 +228,7 @@ class Canvas extends React.Component {
           edge.props.n1Ref.current.id !== uniqueID &&
           edge.props.n2Ref.current.id !== uniqueID
       ),
+      parent: [],
     });
   };
 
@@ -256,6 +268,7 @@ class Canvas extends React.Component {
       edges: this.state.edges.filter(
         (edge) => edge.props.edgeKey !== toDeleteEdgeID
       ),
+      parent: [],
     });
   };
 
@@ -274,6 +287,61 @@ class Canvas extends React.Component {
     this.props.visualizationEnd();
   };
 
+  setParents = (parent) => {
+    this.setState({ parent: parent });
+  };
+
+  getShortestPath = async (id) => {
+    let shortestPath = [];
+
+    const delayTime = this.props.visualizationSpeed;
+    if (
+      !this.props.isVisualizing &&
+      this.props.selectedAlgorithm === "Dijkstra"
+    ) {
+      let vertexId = id;
+      if (!this.vertexIndices.has(vertexId)) return;
+
+      let vertexIndex = this.vertexIndices.get(vertexId);
+      // parent[i] contains the edge in the shortest path
+      if (
+        this.state.parent.length <= vertexIndex ||
+        vertexIndex === this.props.startNode
+      )
+        return;
+      else if (this.state.parent[vertexIndex] === -1) {
+        let message = "Vertex is not connected to source";
+        this.setState({ message: message, showDialog: true });
+      } else {
+        //Resetting the previous path to the original color
+        this.edgeRefs.forEach((ref) => {
+          if (ref.current.state.styles.stroke === "red")
+            ref.current.changeBackgroundColor("#01B878");
+        });
+
+        while (this.state.parent[vertexIndex] !== -1) {
+          shortestPath.push(vertexIndex);
+          this.state.parent[vertexIndex].current.changeBackgroundColor("red");
+          const connectedVertexId =
+            this.state.parent[vertexIndex].current.getOtherVertexID(vertexId);
+          const connectedVertexIndex =
+            this.vertexIndices.get(connectedVertexId);
+          vertexIndex = connectedVertexIndex;
+          vertexId = connectedVertexId;
+          await asyncTimeOut(delayTime);
+        }
+        shortestPath.push(this.props.startNode);
+        shortestPath.reverse();
+        let message = "Shortest path " + shortestPath.join(" -> ");
+        this.setState({ message: message, showDialog: true });
+      }
+    }
+  };
+
+  handleClose = () => {
+    this.setState({ showDialog: false });
+  };
+
   render() {
     return (
       <>
@@ -281,7 +349,7 @@ class Canvas extends React.Component {
           {this.state.vertices}
           {this.state.edges}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "DFS" ? (
+          this.props.selectedAlgorithm === "DFS" ? (
             <DfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -294,7 +362,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "BFS" ? (
+          this.props.selectedAlgorithm === "BFS" ? (
             <BfsVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -307,7 +375,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "Kruskal MST" ? (
+          this.props.selectedAlgorithm === "Kruskal MST" ? (
             <KruskalVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -320,7 +388,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "Prim MST" ? (
+          this.props.selectedAlgorithm === "Prim MST" ? (
             <PrimVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -333,7 +401,7 @@ class Canvas extends React.Component {
             />
           ) : null}
           {this.props.isVisualizing &&
-            this.props.selectedAlgorithm === "Dijkstra" ? (
+          this.props.selectedAlgorithm === "Dijkstra" ? (
             <DijkstraVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -343,6 +411,7 @@ class Canvas extends React.Component {
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
+              setParents={this.setParents}
             />
           ) : null}
         </div>
@@ -352,6 +421,11 @@ class Canvas extends React.Component {
           edgeRefs={this.edgeRefs}
           open={this.props.open}
         ></AdjList>
+        <PositionedSnackbar
+          open={this.state.showDialog}
+          message={this.state.message}
+          handleClose={this.handleClose}
+        />
       </>
     );
   }

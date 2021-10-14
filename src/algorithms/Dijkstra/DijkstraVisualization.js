@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import asyncTimeOut from "../../helpers/asyncTimeOut";
 import MinHeap from "../../helpers/dataStructures/MinHeap";
 
@@ -28,8 +28,8 @@ const DijkstraVisualization = (props) => {
           neighbours[i].current.getOtherVertexID(vertexID)
         );
         if (!minHeap.isPresent(connectedVertexIndex)) continue;
+        const weight = parseInt(neighbours[i].current.props.weight || 0);
 
-        const weight = parseInt(neighbours[i].current.props.weight);
         neighbours[i].current.changeBackgroundColor("#ED3C61");
         await asyncTimeOut(delayTime);
 
@@ -48,7 +48,7 @@ const DijkstraVisualization = (props) => {
         await asyncTimeOut(delayTime);
       }
     }
-
+    props.setParents(parent);
     props.endVisualizing();
   };
 
@@ -57,7 +57,6 @@ const DijkstraVisualization = (props) => {
       vertexIndices.set(props.vertexIDs[i], i);
     }
     parent.fill(-1);
-
     visualizeDijkstra();
   }, []);
 
