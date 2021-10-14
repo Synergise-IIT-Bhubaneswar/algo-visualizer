@@ -293,7 +293,7 @@ class Canvas extends React.Component {
 
   getShortestPath = async (id) => {
     let shortestPath = [];
-
+    let weight = 0;
     const delayTime = this.props.visualizationSpeed;
     if (
       !this.props.isVisualizing &&
@@ -318,9 +318,12 @@ class Canvas extends React.Component {
           if (ref.current.state.styles.stroke === "red")
             ref.current.changeBackgroundColor("#01B878");
         });
+        shortestPath.push(vertexIndex);
 
         while (this.state.parent[vertexIndex] !== -1) {
-          shortestPath.push(vertexIndex);
+          weight += parseInt(
+            this.state.parent[vertexIndex].current.props.weight || 0
+          );
           this.state.parent[vertexIndex].current.changeBackgroundColor("red");
           const connectedVertexId =
             this.state.parent[vertexIndex].current.getOtherVertexID(vertexId);
@@ -328,11 +331,18 @@ class Canvas extends React.Component {
             this.vertexIndices.get(connectedVertexId);
           vertexIndex = connectedVertexIndex;
           vertexId = connectedVertexId;
+          shortestPath.push(vertexIndex);
           await asyncTimeOut(delayTime);
         }
-        shortestPath.push(this.props.startNode);
         shortestPath.reverse();
-        let message = "Shortest path " + shortestPath.join(" -> ");
+        let message = (
+          <div>
+            <p style={{ margin: "2px" }}>
+              Shortest path : {shortestPath.join(" -> ")}
+            </p>
+            <p style={{ margin: "2px" }}>Total weight : {weight}</p>
+          </div>
+        );
         this.setState({ message: message, showDialog: true });
       }
     }

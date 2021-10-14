@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignContent: "center",
     marginTop: "10vh",
     minWidth: "none",
+    padding: "5px",
   },
 }));
 
