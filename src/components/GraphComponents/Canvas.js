@@ -9,6 +9,7 @@ import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
 import TopologicalSortVisualization from "../../algorithms/TopologicalSort/TopologicalSortVisualization";
 import AdjList from "../AdjList/AdjList";
+import TopoModal from "../TopoModal/TopoModal";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Canvas extends React.Component {
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      topoSort: [],
     };
   }
 
@@ -145,6 +147,7 @@ class Canvas extends React.Component {
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      topoSort: [],
     });
     this.props.visualizationEnd();
   };
@@ -358,6 +361,18 @@ class Canvas extends React.Component {
     return true;
   };
 
+  setTopoSort = (array) => {
+    const revArray = [];
+
+    for (var i = array.length - 1; i >= 0; i--) {
+      revArray.push(array[i]);
+    }
+
+    // console.log(revArray);
+
+    this.setState({ topoSort: revArray });
+  };
+
   render() {
     return (
       <>
@@ -440,6 +455,8 @@ class Canvas extends React.Component {
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
+              setTopoModalOpen={this.props.setTopoModalOpen}
+              setTopoSort={this.setTopoSort}
             />
           ) : null}
         </div>
@@ -449,6 +466,11 @@ class Canvas extends React.Component {
           edgeRefs={this.edgeRefs}
           open={this.props.open}
         ></AdjList>
+        <TopoModal
+          topoSort={this.state.topoSort}
+          open={this.props.topoModalOpen}
+          setTopoModalOpen={this.props.setTopoModalOpen}
+        ></TopoModal>
       </>
     );
   }

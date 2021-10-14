@@ -79,9 +79,9 @@ const TopologicalSortVisualization = (props) => {
       }
     }
 
-    console.log(stack.elements());
-    // setModalOpen(true);
-
+    // console.log(stack.elements());
+    props.setTopoSort(stack.elements());
+    props.setTopoModalOpen(true);
     props.endVisualizing();
     // props.vertexRefs
     //   .get(props.vertexIDs[props.startingVertex])
