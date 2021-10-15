@@ -83,9 +83,6 @@ class Vertex extends Component {
     });
   };
 
-  clickVertex = () => {
-    this.props.getShortestPath(this.props.uniqueID);
-  };
   render() {
     return (
       <div
@@ -97,7 +94,6 @@ class Vertex extends Component {
         onTouchStart={this.dragStart}
         onTouchMove={this.dragging}
         onTouchEnd={this.dragEnd}
-        onClick={this.clickVertex}
       >
         <h3>{this.state.vertexIndex} </h3>
       </div>

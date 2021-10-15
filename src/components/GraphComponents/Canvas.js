@@ -18,16 +18,13 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
-    this.vertexIndices = new Map();
+
     // this stores the directed edge incident TO a vertex
     this.state = {
       visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
-      parent: [],
-      showDialog: false,
-      message: "",
     };
   }
 
@@ -58,7 +55,6 @@ class Canvas extends React.Component {
         getShortestPath={this.getShortestPath}
       />
     );
-    this.vertexIndices.set(uniqueID, this.vertexIDs.length);
     this.vertexIDs.push(uniqueID);
     this.vertexRefs.set(uniqueID, newVertexRef);
     this.adjList.set(uniqueID, []);
@@ -136,7 +132,6 @@ class Canvas extends React.Component {
 
     this.setState({
       edges: newEdges,
-      parent: [],
     });
   };
 
@@ -146,14 +141,12 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
-    this.vertexIndices = new Map();
 
     this.setState({
       visualize: false,
       noOfVertices: 0,
       vertices: [],
       edges: [],
-      parent: [],
     });
     this.props.visualizationEnd();
   };
@@ -162,7 +155,6 @@ class Canvas extends React.Component {
   deleteVertex = (vertexIndex) => {
     const uniqueID = this.vertexIDs[vertexIndex];
     this.vertexRefs.delete(uniqueID);
-    this.vertexIndices.delete(uniqueID);
 
     const incidentEdges = this.adjList.get(uniqueID);
 
@@ -228,7 +220,6 @@ class Canvas extends React.Component {
           edge.props.n1Ref.current.id !== uniqueID &&
           edge.props.n2Ref.current.id !== uniqueID
       ),
-      parent: [],
     });
   };
 
@@ -268,7 +259,6 @@ class Canvas extends React.Component {
       edges: this.state.edges.filter(
         (edge) => edge.props.edgeKey !== toDeleteEdgeID
       ),
-      parent: [],
     });
   };
 
@@ -285,71 +275,6 @@ class Canvas extends React.Component {
     this.vertexRefs.forEach((ref) => ref.current.changeBackgroundColor("aqua"));
     this.edgeRefs.forEach((ref) => ref.current.changeBackgroundColor("black"));
     this.props.visualizationEnd();
-  };
-
-  setParents = (parent) => {
-    this.setState({ parent: parent });
-  };
-
-  getShortestPath = async (id) => {
-    let shortestPath = [];
-    let weight = 0;
-    const delayTime = this.props.visualizationSpeed;
-    if (
-      !this.props.isVisualizing &&
-      this.props.selectedAlgorithm === "Dijkstra"
-    ) {
-      let vertexId = id;
-      if (!this.vertexIndices.has(vertexId)) return;
-
-      let vertexIndex = this.vertexIndices.get(vertexId);
-      // parent[i] contains the edge in the shortest path
-      if (
-        this.state.parent.length <= vertexIndex ||
-        vertexIndex === this.props.startNode
-      )
-        return;
-      else if (this.state.parent[vertexIndex] === -1) {
-        let message = "Vertex is not connected to source";
-        this.setState({ message: message, showDialog: true });
-      } else {
-        //Resetting the previous path to the original color
-        this.edgeRefs.forEach((ref) => {
-          if (ref.current.state.styles.stroke === "red")
-            ref.current.changeBackgroundColor("#01B878");
-        });
-        shortestPath.push(vertexIndex);
-
-        while (this.state.parent[vertexIndex] !== -1) {
-          weight += parseInt(
-            this.state.parent[vertexIndex].current.props.weight || 0
-          );
-          this.state.parent[vertexIndex].current.changeBackgroundColor("red");
-          const connectedVertexId =
-            this.state.parent[vertexIndex].current.getOtherVertexID(vertexId);
-          const connectedVertexIndex =
-            this.vertexIndices.get(connectedVertexId);
-          vertexIndex = connectedVertexIndex;
-          vertexId = connectedVertexId;
-          shortestPath.push(vertexIndex);
-          await asyncTimeOut(delayTime);
-        }
-        shortestPath.reverse();
-        let message = (
-          <div>
-            <p style={{ margin: "2px" }}>
-              Shortest path : {shortestPath.join(" -> ")}
-            </p>
-            <p style={{ margin: "2px" }}>Total weight : {weight}</p>
-          </div>
-        );
-        this.setState({ message: message, showDialog: true });
-      }
-    }
-  };
-
-  handleClose = () => {
-    this.setState({ showDialog: false });
   };
 
   render() {
@@ -410,8 +335,7 @@ class Canvas extends React.Component {
               visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
-          {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Dijkstra" ? (
+          {this.props.selectedAlgorithm === "Dijkstra" ? (
             <DijkstraVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -421,7 +345,7 @@ class Canvas extends React.Component {
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
-              setParents={this.setParents}
+              isVisualizing={this.props.isVisualizing}
             />
           ) : null}
         </div>
@@ -431,11 +355,6 @@ class Canvas extends React.Component {
           edgeRefs={this.edgeRefs}
           open={this.props.open}
         ></AdjList>
-        <PositionedSnackbar
-          open={this.state.showDialog}
-          message={this.state.message}
-          handleClose={this.handleClose}
-        />
       </>
     );
   }
