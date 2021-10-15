@@ -19,6 +19,7 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
+
     // this stores the directed edge incident TO a vertex
     this.state = {
       visualize: false,
@@ -55,7 +56,6 @@ class Canvas extends React.Component {
         key={uniqueID}
       />
     );
-
     this.vertexIDs.push(uniqueID);
     this.vertexRefs.set(uniqueID, newVertexRef);
     this.adjList.set(uniqueID, []);
@@ -142,6 +142,7 @@ class Canvas extends React.Component {
     this.vertexRefs = new Map();
     this.adjList = new Map();
     this.directedTo = new Map();
+
     this.setState({
       visualize: false,
       noOfVertices: 0,
@@ -431,8 +432,7 @@ class Canvas extends React.Component {
               visualizationSpeed={this.props.visualizationSpeed}
             />
           ) : null}
-          {this.props.isVisualizing &&
-          this.props.selectedAlgorithm === "Dijkstra" ? (
+          {this.props.selectedAlgorithm === "Dijkstra" ? (
             <DijkstraVisualization
               startingVertex={parseInt(this.props.startNode)}
               noOfVertices={this.state.noOfVertices}
@@ -442,6 +442,8 @@ class Canvas extends React.Component {
               adjList={this.adjList}
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
+              isVisualizing={this.props.isVisualizing}
+              edges={this.state.edges}
             />
           ) : null}
           {this.props.isVisualizing &&
