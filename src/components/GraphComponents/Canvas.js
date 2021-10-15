@@ -7,7 +7,9 @@ import BfsVisualization from "../../algorithms/BFS/BfsVisualization";
 import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization";
 import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
+import TopologicalSortVisualization from "../../algorithms/TopologicalSort/TopologicalSortVisualization";
 import AdjList from "../AdjList/AdjList";
+import TopoModal from "../TopoModal/TopoModal";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -24,6 +26,7 @@ class Canvas extends React.Component {
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      topoSort: [],
     };
   }
 
@@ -145,6 +148,7 @@ class Canvas extends React.Component {
       noOfVertices: 0,
       vertices: [],
       edges: [],
+      topoSort: [],
     });
     this.props.visualizationEnd();
   };
@@ -275,6 +279,101 @@ class Canvas extends React.Component {
     this.props.visualizationEnd();
   };
 
+  checkIfAllEdgesAreDirected = () => {
+    const adj = [...this.adjList.entries()];
+
+    for (var i = 0; i < adj.length; i++) {
+      const entry = adj[i][1];
+      for (var j = 0; j < entry.length; j++) {
+        const edgeRef = this.edgeRefs.get(entry[j]);
+
+        if (!edgeRef.current.props.isDirected) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  isCyclic = () => {
+    const vertexIndices = new Map();
+    const V = this.state.noOfVertices;
+    for (var i = 0; i < V; i++) {
+      vertexIndices.set(this.vertexIDs[i], i);
+    }
+
+    let visited = new Array(V).fill(false);
+    let recStack = new Array(V).fill(false);
+
+    // Call the recursive helper function to
+    // detect cycle in different DFS trees
+    for (let i = 0; i < V; i++)
+      if (
+        this.isCyclicUtil(this.vertexIDs[i], vertexIndices, visited, recStack)
+      )
+        return true;
+
+    return false;
+  };
+
+  isCyclicUtil = (vertexID, vertexIndices, visited, recStack) => {
+    var index = vertexIndices.get(vertexID);
+
+    if (!visited[index]) {
+      visited[index] = true;
+      recStack[index] = true;
+
+      const incidentEdges = this.adjList.get(vertexID);
+      const connectedVerticesID = incidentEdges.map((id) =>
+        this.edgeRefs.get(id).current.getOtherVertexID(vertexID)
+      );
+
+      for (let c = 0; c < connectedVerticesID.length; c++) {
+        const otherIndex = vertexIndices.get(connectedVerticesID[c]);
+
+        if (
+          !visited[otherIndex] &&
+          this.isCyclicUtil(
+            connectedVerticesID[c],
+            vertexIndices,
+            visited,
+            recStack
+          )
+        )
+          return true;
+        else if (recStack[otherIndex]) return true;
+      }
+      recStack[index] = false;
+      return false;
+    }
+  };
+
+  isGraphDAG = () => {
+    if (!this.checkIfAllEdgesAreDirected()) {
+      console.log("There are undirected edges in your graph");
+      return false;
+    }
+
+    if (this.isCyclic()) {
+      console.log("There is a cycle in your graph");
+      return false;
+    }
+
+    return true;
+  };
+
+  setTopoSort = (array) => {
+    const revArray = [];
+
+    for (var i = array.length - 1; i >= 0; i--) {
+      revArray.push(array[i]);
+    }
+
+    // console.log(revArray);
+
+    this.setState({ topoSort: revArray });
+  };
+
   render() {
     return (
       <>
@@ -347,6 +446,21 @@ class Canvas extends React.Component {
               edges={this.state.edges}
             />
           ) : null}
+          {this.props.isVisualizing &&
+          this.props.selectedAlgorithm === "Topological Sort" ? (
+            <TopologicalSortVisualization
+              startingVertex={parseInt(this.props.startNode)}
+              noOfVertices={this.state.noOfVertices}
+              vertexIDs={this.vertexIDs}
+              vertexRefs={this.vertexRefs}
+              edgeRefs={this.edgeRefs}
+              adjList={this.adjList}
+              endVisualizing={this.endVisualizing}
+              visualizationSpeed={this.props.visualizationSpeed}
+              setTopoModalOpen={this.props.setTopoModalOpen}
+              setTopoSort={this.setTopoSort}
+            />
+          ) : null}
         </div>
         <AdjList
           adjList={this.adjList}
@@ -354,6 +468,11 @@ class Canvas extends React.Component {
           edgeRefs={this.edgeRefs}
           open={this.props.open}
         ></AdjList>
+        <TopoModal
+          topoSort={this.state.topoSort}
+          open={this.props.topoModalOpen}
+          setTopoModalOpen={this.props.setTopoModalOpen}
+        ></TopoModal>
       </>
     );
   }
