@@ -136,8 +136,9 @@ const DijkstraVisualization = (props) => {
   }, [props.isVisualizing]);
 
   useEffect(() => {
+    // A change in either of vertices, start node, edges should close the modal
     if (showModal) closeModal();
-  }, [props.noOfVertices]);
+  }, [props.noOfVertices, props.startingVertex, props.edges]);
 
   // useEffect(() => {
   //   visualizeDijkstra();

@@ -344,6 +344,7 @@ class Canvas extends React.Component {
               endVisualizing={this.endVisualizing}
               visualizationSpeed={this.props.visualizationSpeed}
               isVisualizing={this.props.isVisualizing}
+              edges={this.state.edges}
             />
           ) : null}
         </div>
