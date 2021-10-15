@@ -8,8 +8,7 @@ import KruskalVisualization from "../../algorithms/Kruskal/KruskalVisualization"
 import PrimVisualization from "../../algorithms/Prim/PrimVisualization";
 import DijkstraVisualization from "../../algorithms/Dijkstra/DijkstraVisualization";
 import AdjList from "../AdjList/AdjList";
-import asyncTimeOut from "../../helpers/asyncTimeOut";
-import PositionedSnackbar from "../UI/Components/SnackBar";
+
 class Canvas extends React.Component {
   constructor(props) {
     super(props);
@@ -52,7 +51,6 @@ class Canvas extends React.Component {
         moveIncidentEdges={this.moveEdge}
         uniqueID={uniqueID}
         key={uniqueID}
-        getShortestPath={this.getShortestPath}
       />
     );
     this.vertexIDs.push(uniqueID);
