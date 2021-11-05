@@ -57,9 +57,12 @@ const DfsVisualization = (props) => {
 
     await DFSAlgo(props.vertexIDs[props.startingVertex]);
     props.endVisualizing();
-    // props.vertexRefs
-    //   .get(props.vertexIDs[props.startingVertex])
-    //   .current.changeBackgroundColor("#01B878");
+    
+    await asyncTimeOut(delayTime);
+
+    props.vertexRefs
+      .get(props.vertexIDs[props.startingVertex])
+      .current.changeBackgroundColor("#01B878");
   };
 
   useEffect(() => {
